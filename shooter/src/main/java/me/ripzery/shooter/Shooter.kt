@@ -14,6 +14,7 @@ import android.provider.MediaStore
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
 import android.widget.ImageView
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_shooter.*
 import me.ripzery.bgcutter.BgCutter
 import java.io.File
@@ -92,8 +93,12 @@ class ShooterActivity : AppCompatActivity() {
         val bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions)
         val adjustAngleBitmap = adjustOrientation(bitmap)
         val bgcutter = BgCutter(adjustAngleBitmap)
-        bgcutter.removeGreen {
+        bgcutter.removeGreen({
             target.setImageBitmap(it)
+        }) {
+            // onCompleted
+            Toast.makeText(this, "Remove background complete", Toast.LENGTH_SHORT).show()
+            // TODO: Save image to the device
         }
     }
 
