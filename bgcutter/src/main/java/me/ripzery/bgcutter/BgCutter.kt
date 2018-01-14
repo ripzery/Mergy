@@ -28,7 +28,7 @@ class BgCutter(private val originalBitmap: Bitmap) {
                 bg {
                     for (j in 0 until bitmap.height) {
                         val pixel1 = bitmap.getPixel(it, j)
-                        if (Color.green(pixel1) - Color.red(pixel1) > 20 && Color.green(pixel1) - Color.blue(pixel1) > 20) {
+                        if (Color.green(pixel1) - Color.red(pixel1) > 40 && Color.green(pixel1) - Color.blue(pixel1) > 40) {
                             val a = Color.alpha(Color.TRANSPARENT)
                             bitmap.setPixel(it, j, a)
                         } else {
