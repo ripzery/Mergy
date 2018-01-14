@@ -19,7 +19,7 @@ import org.jetbrains.anko.coroutines.experimental.bg
 class BgCutter(private val originalBitmap: Bitmap) {
     private val bgCollection = mutableListOf<Deferred<Bitmap>>()
 
-    fun removeGreen(callback: (Bitmap) -> Unit, onCompleted: () -> Unit) {
+    fun removeGreen(callback: (Bitmap) -> Unit, onCompleted: (Bitmap) -> Unit) {
         val bitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888, true)
         bitmap.setHasAlpha(true)
         Log.d("Total pixels", "${bitmap.width}, ${bitmap.height}")
@@ -39,12 +39,9 @@ class BgCutter(private val originalBitmap: Bitmap) {
                 }
             }
             bgCollection.forEach {
-                val bitmap = it.await()
-                callback(bitmap)
+                callback(it.await())
             }
-
-            Log.d("Test", "Complete")
-            onCompleted()
+            onCompleted(bitmap)
         }
     }
 }

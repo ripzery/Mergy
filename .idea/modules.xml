@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/bgcutter/bgcutter.iml" filepath="$PROJECT_DIR$/bgcutter/bgcutter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bitmapkeeper/bitmapkeeper.iml" filepath="$PROJECT_DIR$/bitmapkeeper/bitmapkeeper.iml" />
       <module fileurl="file://$PROJECT_DIR$/mergy.iml" filepath="$PROJECT_DIR$/mergy.iml" />
       <module fileurl="file://$PROJECT_DIR$/shooter/shooter.iml" filepath="$PROJECT_DIR$/shooter/shooter.iml" />
     </modules>

@@ -17,6 +17,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_shooter.*
 import me.ripzery.bgcutter.BgCutter
+import me.ripzery.bitmapkeeper.BitmapKeeper
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -97,8 +98,10 @@ class ShooterActivity : AppCompatActivity() {
             target.setImageBitmap(it)
         }) {
             // onCompleted
-            Toast.makeText(this, "Remove background complete", Toast.LENGTH_SHORT).show()
             // TODO: Save image to the device
+            val bitmapKeeper = BitmapKeeper(it)
+            bitmapKeeper.save(this)
+            Toast.makeText(this, "New image is saved successfully.", Toast.LENGTH_SHORT).show()
         }
     }
 
