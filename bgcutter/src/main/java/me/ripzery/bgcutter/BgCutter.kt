@@ -1,6 +1,8 @@
 package me.ripzery.bgcutter
 
 import android.graphics.Bitmap
+import android.graphics.Color
+import android.util.Log
 
 
 /**
@@ -10,8 +12,21 @@ import android.graphics.Bitmap
  * Copyright © 2017 OmiseGO. All rights reserved.
  */
 
-class BgCutter(val bitmap: Bitmap) {
-    fun chromakey() {
-
+class BgCutter(private val bitmap: Bitmap) {
+    fun removeGreen(): Bitmap {
+        bitmap.setHasAlpha(true)
+        Log.d("Total pixels", "${bitmap.width}, ${bitmap.height}")
+        for (i in 0 until bitmap.width) {
+            for (j in 0 until bitmap.height) {
+                val pixel1 = bitmap.getPixel(i, j)
+                if (Color.green(pixel1) - Color.red(pixel1) > 20 && Color.green(pixel1) - Color.blue(pixel1) > 20) {
+                    val a = Color.alpha(Color.TRANSPARENT)
+                    bitmap.setPixel(i, j, a)
+                } else {
+                    Log.d("Non-Green", "${Color.red(pixel1)} ${Color.green(pixel1)} ${Color.blue(pixel1)}")
+                }
+            }
+        }
+        return bitmap
     }
 }

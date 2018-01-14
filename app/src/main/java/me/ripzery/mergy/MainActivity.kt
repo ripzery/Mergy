@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.graphics.Matrix
 import android.media.ExifInterface
 import android.net.Uri
@@ -13,8 +12,8 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
+import me.ripzery.bgcutter.BgCutter
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,26 +32,8 @@ class MainActivity : AppCompatActivity() {
 
         /* get bitmap from resource */
         val bitmap = BitmapFactory.decodeResource(resources, R.drawable.test_9).copy(Bitmap.Config.ARGB_8888, true)
-        bitmap.setHasAlpha(true)
-        val pixel = bitmap.getPixel(0, 0)
-        val red = Color.red(pixel)
-        val green = Color.green(pixel)
-        val blue = Color.blue(pixel)
-//        bitmap.pixels
-        Log.d("Total pixels", "${bitmap.width}, ${bitmap.height}")
-        for (i in 0 until bitmap.width) {
-            for (j in 0 until bitmap.height) {
-                val pixel1 = bitmap.getPixel(i, j)
-                if (Color.green(pixel1) - Color.red(pixel1) > 20 && Color.green(pixel1) - Color.blue(pixel1) > 20) {
-                    val a = Color.alpha(Color.TRANSPARENT)
-                    bitmap.setPixel(i, j, a)
-                } else {
-                    Log.d("Non-Green", "${Color.red(pixel1)} ${Color.green(pixel1)} ${Color.blue(pixel1)}")
-                }
-            }
-        }
-        ivGreenPhoto.setImageBitmap(bitmap)
-        Log.d("Color First Pixel", "$red $green $blue")
+        val bgcutter: BgCutter = BgCutter(bitmap)
+        ivGreenPhoto.setImageBitmap(bgcutter.removeGreen())
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
