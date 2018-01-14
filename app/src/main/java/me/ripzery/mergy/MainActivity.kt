@@ -4,8 +4,13 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import me.ripzery.shooter.ShooterActivity
+import android.provider.MediaStore
+import android.graphics.Bitmap
+
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -28,7 +33,10 @@ class MainActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 RESULT_SHOOTER_ACTIVITY -> {
-                    
+                    Toast.makeText(this, "Image is saved successfully.", Toast.LENGTH_LONG).show()
+                    val savedImageUri = data?.data
+                    val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, savedImageUri)
+                    ivPhoto.setImageBitmap(bitmap)
                 }
             }
         }

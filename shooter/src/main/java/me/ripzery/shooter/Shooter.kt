@@ -14,7 +14,6 @@ import android.provider.MediaStore
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
 import android.widget.ImageView
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_shooter.*
 import me.ripzery.bgcutter.BgCutter
 import me.ripzery.bitmapkeeper.BitmapKeeper
@@ -45,7 +44,12 @@ class ShooterActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
             galleryAddPic()
-            setPic(ivGreenPhoto)
+            setPic(ivGreenPhoto) {
+                val intent = Intent()
+                intent.data = it
+                setResult(Activity.RESULT_OK, intent)
+                finish()
+            }
         }
     }
 
@@ -71,7 +75,7 @@ class ShooterActivity : AppCompatActivity() {
         }
     }
 
-    private fun setPic(target: ImageView) {
+    private fun setPic(target: ImageView, onCompleted: (Uri) -> Unit) {
         // Get the dimensions of the View
         val targetW = target.width
         val targetH = target.height
@@ -99,9 +103,10 @@ class ShooterActivity : AppCompatActivity() {
         }) {
             // onCompleted
             // TODO: Save image to the device
+            it.setHasAlpha(true)
             val bitmapKeeper = BitmapKeeper(it)
-            bitmapKeeper.save(this)
-            Toast.makeText(this, "New image is saved successfully.", Toast.LENGTH_SHORT).show()
+            val savedImageUri = bitmapKeeper.save(this)
+            onCompleted(savedImageUri)
         }
     }
 

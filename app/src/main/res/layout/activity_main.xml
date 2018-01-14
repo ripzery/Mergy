@@ -13,4 +13,13 @@
         android:layout_margin="16dp"
         android:text="Take a photo" />
 
+    <ImageView
+        android:id="@+id/ivPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        android:minHeight="300dp"
+        android:scaleType="centerInside" />
+
 </FrameLayout>
