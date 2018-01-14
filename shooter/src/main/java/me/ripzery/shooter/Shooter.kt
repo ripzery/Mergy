@@ -102,6 +102,7 @@ class ShooterActivity : AppCompatActivity() {
                 matrix, true)
     }
 
+    // TODO: Should make photo saved folder public!
     @SuppressLint("SimpleDateFormat")
     private fun createImageFile(): File {
         // Create an image file name
@@ -115,7 +116,7 @@ class ShooterActivity : AppCompatActivity() {
         )
 
         // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath()
+        mCurrentPhotoPath = image.absolutePath
         return image
     }
 
