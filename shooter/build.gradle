@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 27
@@ -8,9 +9,7 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
 
     buildTypes {
@@ -20,19 +19,14 @@ android {
         }
     }
 
-    packagingOptions {
-        pickFirst 'org/bytedeco/javacpp/macosx-x86_64/libusb-1.0.dylib'
-        pickFirst 'META-INF/maven/org.bytedeco.javacpp-presets/opencv/pom.properties'
-        pickFirst 'META-INF/maven/org.bytedeco.javacpp-presets/opencv/pom.xml'
-        pickFirst 'META-INF/maven/org.bytedeco.javacpp-presets/ffmpeg/pom.properties'
-        pickFirst 'META-INF/maven/org.bytedeco.javacpp-presets/ffmpeg/pom.xml'
-    }
-
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.github.bumptech.glide:glide:4.5.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.5.0'
     implementation 'com.android.support:appcompat-v7:27.0.2'
+    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
@@ -40,4 +34,5 @@ dependencies {
 }
 repositories {
     mavenCentral()
+
 }

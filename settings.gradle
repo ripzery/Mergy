@@ -1,1 +1,1 @@
-include ':app', ':bgcutter'
+include ':app', ':bgcutter', ':shooter'

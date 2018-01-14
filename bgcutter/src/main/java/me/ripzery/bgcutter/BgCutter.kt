@@ -12,8 +12,9 @@ import android.util.Log
  * Copyright © 2017 OmiseGO. All rights reserved.
  */
 
-class BgCutter(private val bitmap: Bitmap) {
+class BgCutter(private val originalBitmap: Bitmap) {
     fun removeGreen(): Bitmap {
+        val bitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888, true)
         bitmap.setHasAlpha(true)
         Log.d("Total pixels", "${bitmap.width}, ${bitmap.height}")
         for (i in 0 until bitmap.width) {
