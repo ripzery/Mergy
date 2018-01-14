@@ -7,18 +7,10 @@
 
     <Button
         android:id="@+id/btnTakeAPhoto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|center_horizontal"
-        android:layout_marginTop="16dp"
-        android:text="Take a photo"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/ivGreenPhoto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
-        android:scaleType="centerCrop"
-        android:src="@drawable/green" />
+        android:layout_margin="16dp"
+        android:text="Take a photo" />
+
 </FrameLayout>

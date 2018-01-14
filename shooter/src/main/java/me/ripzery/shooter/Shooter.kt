@@ -13,8 +13,10 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.ImageView
 import kotlinx.android.synthetic.main.activity_shooter.*
+import me.ripzery.bgcutter.BgCutter
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -89,10 +91,86 @@ class ShooterActivity : AppCompatActivity() {
         bmOptions.inPurgeable = true
 
         val bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions)
+//
+//        Glide.with(this)
+//                .asBitmap()
+//                .load(bitmap)
+//                .apply(RequestOptions()
+//                        .encodeQuality(50)
+//                        .downsample(DownsampleStrategy.DEFAULT)
+//                        .placeholder(R.drawable.green_4)
+//                )
+//                .into(object : Target<Bitmap> {
+//                    override fun getSize(cb: SizeReadyCallback) {
+//                        Log.d("Shooter", "getSize")
+//                        cb.onSizeReady(targetW, targetH)
+//                    }
+//
+//                    override fun onLoadCleared(placeholder: Drawable?) {
+//                        Log.d("Shooter", "onLoadCleared")
+//                    }
+//
+//                    override fun onStop() {
+//                        Log.d("Shooter", "onStop")
+//                    }
+//
+//                    override fun onStart() {
+//                        Log.d("Shooter", "onStart")
+//                    }
+//
+//                    override fun getRequest(): Request? {
+//                        Log.d("Shooter", "getRequest")
+//                        return null
+//                    }
+//
+//                    override fun onLoadFailed(errorDrawable: Drawable?) {
+//                        Log.d("Shooter", "onLoadFailed")
+//                    }
+//
+//                    override fun removeCallback(cb: SizeReadyCallback) {
+//                        Log.d("Shooter", "removeCallback")
+//                    }
+//
+//                    override fun onDestroy() {
+//                        Log.d("Shooter", "onDestroy")
+//                    }
+//
+//                    override fun setRequest(request: Request?) {
+//                        Log.d("Shooter", "setRequest")
+//                    }
+//
+//                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+//                        Log.d("Shooter", "onResourceReady ${resource.height} ${resource.width}")
+//                        async(UI) {
+//                            Log.d("Test", "Hello world")
+//                            val readyBitmap = bg {
+//                                Log.d("Test", "Hello world")
+//                                val bgcutter = BgCutter(bitmap)
+//                                val removedGreenBitmap = bgcutter.removeGreen()
+//                                val adjustAngleBitmap = adjustOrientation(removedGreenBitmap)
+//                                adjustAngleBitmap
+//                            }
+//
+//                            target.setImageBitmap(readyBitmap.await())
+//                        }
+//                    }
+//
+//                    override fun onLoadStarted(placeholder: Drawable?) {
+//                        Log.d("Shooter", "onLoadStarted")
+//                        target.setImageDrawable(placeholder)
+//                    }
+//
+//                })
 
+//        async(UI) {
+//            Log.d("Test", "Hello world")
+//            val readyBitmap = bg {
+        Log.d("Test", "Hello world")
         val adjustAngleBitmap = adjustOrientation(bitmap)
-
-        target.setImageBitmap(adjustAngleBitmap)
+        val bgcutter = BgCutter(adjustAngleBitmap)
+        bgcutter.removeGreen {
+            target.setImageBitmap(it)
+        }
     }
 
     private fun rotateImage(source: Bitmap, angle: Float): Bitmap {

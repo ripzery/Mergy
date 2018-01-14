@@ -3,6 +3,10 @@ package me.ripzery.bgcutter
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.util.Log
+import kotlinx.coroutines.experimental.Deferred
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import org.jetbrains.anko.coroutines.experimental.bg
 
 
 /**
@@ -13,21 +17,32 @@ import android.util.Log
  */
 
 class BgCutter(private val originalBitmap: Bitmap) {
-    fun removeGreen(): Bitmap {
+    private val bgCollection = mutableListOf<Deferred<Bitmap>>()
+
+    fun removeGreen(callback: (Bitmap) -> Unit) {
         val bitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888, true)
         bitmap.setHasAlpha(true)
         Log.d("Total pixels", "${bitmap.width}, ${bitmap.height}")
-        for (i in 0 until bitmap.width) {
-            for (j in 0 until bitmap.height) {
-                val pixel1 = bitmap.getPixel(i, j)
-                if (Color.green(pixel1) - Color.red(pixel1) > 20 && Color.green(pixel1) - Color.blue(pixel1) > 20) {
-                    val a = Color.alpha(Color.TRANSPARENT)
-                    bitmap.setPixel(i, j, a)
-                } else {
-                    Log.d("Non-Green", "${Color.red(pixel1)} ${Color.green(pixel1)} ${Color.blue(pixel1)}")
+        async(UI) {
+            for (i in 0 until bitmap.width) {
+                val worker: Deferred<Bitmap> = bg {
+                    for (j in 0 until bitmap.height) {
+                        val pixel1 = bitmap.getPixel(i, j)
+                        if (Color.green(pixel1) - Color.red(pixel1) > 20 && Color.green(pixel1) - Color.blue(pixel1) > 20) {
+                            val a = Color.alpha(Color.TRANSPARENT)
+                            bitmap.setPixel(i, j, a)
+                        } else {
+//                    Log.d("Non-Green", "${Color.red(pixel1)} ${Color.green(pixel1)} ${Color.blue(pixel1)}")
+                        }
+                    }
+                    bitmap
                 }
+                bgCollection.add(worker)
+            }
+            bgCollection.forEach {
+                val bitmap = it.await()
+                callback(bitmap)
             }
         }
-        return bitmap
     }
 }
