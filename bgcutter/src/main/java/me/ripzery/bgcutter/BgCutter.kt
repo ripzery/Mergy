@@ -24,20 +24,19 @@ class BgCutter(private val originalBitmap: Bitmap) {
         bitmap.setHasAlpha(true)
         Log.d("Total pixels", "${bitmap.width}, ${bitmap.height}")
         async(UI) {
-            for (i in 0 until bitmap.width) {
-                val worker: Deferred<Bitmap> = bg {
+            (0 until bitmap.width).mapTo(bgCollection) {
+                bg {
                     for (j in 0 until bitmap.height) {
-                        val pixel1 = bitmap.getPixel(i, j)
+                        val pixel1 = bitmap.getPixel(it, j)
                         if (Color.green(pixel1) - Color.red(pixel1) > 20 && Color.green(pixel1) - Color.blue(pixel1) > 20) {
                             val a = Color.alpha(Color.TRANSPARENT)
-                            bitmap.setPixel(i, j, a)
+                            bitmap.setPixel(it, j, a)
                         } else {
-//                    Log.d("Non-Green", "${Color.red(pixel1)} ${Color.green(pixel1)} ${Color.blue(pixel1)}")
+                            Log.d("Non-Green", "${Color.red(pixel1)} ${Color.green(pixel1)} ${Color.blue(pixel1)}")
                         }
                     }
                     bitmap
                 }
-                bgCollection.add(worker)
             }
             bgCollection.forEach {
                 val bitmap = it.await()
