@@ -33,11 +33,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MergeActivity"></activity>
+        <activity android:name=".MergeActivity" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="31fd1ff4d9e09f5aacca0104abd1d8aae00fb456" />
+
+        <activity android:name=".DragActivity"></activity>
     </application>
 
 </manifest>

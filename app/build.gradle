@@ -28,6 +28,7 @@ dependencies {
     implementation 'com.flying.xiaopo:sticker:1.6.0'
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
     implementation 'com.flying.xiaopo:sticker:1.6.0'
+    implementation 'com.github.nisrulz:sensey:1.8.0'
     implementation 'com.github.Almeros:android-gesture-detectors:v1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.firebase:firebase-core:11.4.2'

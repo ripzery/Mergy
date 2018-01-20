@@ -1,12 +1,8 @@
 package me.ripzery.mergy
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Matrix
 import android.util.AttributeSet
-import android.view.MotionEvent
 import android.widget.ImageView
-import com.almeros.android.multitouch.MoveGestureDetector
 
 
 /**
@@ -19,47 +15,14 @@ import com.almeros.android.multitouch.MoveGestureDetector
 class DraggableImageView constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ImageView(context, attrs, defStyleAttr) {
+    private var xDelta = 0.0f
+    private var yDelta = 0.0f
 
-    constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0) {}
-
-    private var mFocusX = 0f
-    private var mFocusY = 0f
-    private val mScaleFactor = 0.4f
-    private val mMatrix by lazy { Matrix() }
-    private val mMoveDetector by lazy { MoveGestureDetector(context, MoveListener()) }
-
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        mMoveDetector.onTouchEvent(event)
-
-        val mImageHeight = drawable.intrinsicHeight
-        val mImageWidth = drawable.intrinsicWidth
-
-        val mScaledImageCenterX = (mImageWidth * mScaleFactor) / 2
-        val mScaledImageCenterY = (mImageHeight * mScaleFactor) / 2
-        mMatrix.reset()
-        invalidate()
-        mMatrix.postTranslate(mFocusX - mScaledImageCenterX, mFocusY - mScaledImageCenterY)
-        imageMatrix = mMatrix
-        return true
+    constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0) {
+        init()
     }
 
-    inner class MoveListener : MoveGestureDetector.OnMoveGestureListener {
-        override fun onMoveBegin(detector: MoveGestureDetector?): Boolean {
-            return true
-        }
-
-        override fun onMoveEnd(detector: MoveGestureDetector?) {
-
-        }
-
-        override fun onMove(detector: MoveGestureDetector): Boolean {
-            val d = detector.focusDelta
-            mFocusX += d.x
-            mFocusY += d.y
-            return true
-        }
-
+    private fun init() {
+        setBackgroundResource(R.drawable.bg_image_border)
     }
-
 }

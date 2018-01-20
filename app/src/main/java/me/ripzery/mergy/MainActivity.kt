@@ -6,12 +6,9 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_main.*
-import me.ripzery.shooter.ShooterActivity
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
-
-
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -24,9 +21,11 @@ class MainActivity : AppCompatActivity() {
 
 //        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.test_9)
 //        val bgcutter: BgCutter = BgCutter(bitmap)
-//        ivGreenPhoto.setImageBitmap(bgcutter.removeGreen())
+//        ivPhoto.setImageBitmap(bgcutter.removeGreen())
 
-        startActivityForResult(Intent(this, ShooterActivity::class.java), RESULT_SHOOTER_ACTIVITY)
+        startActivity(Intent(this, DragActivity::class.java))
+
+//        startActivityForResult(Intent(this, ShooterActivity::class.java), RESULT_SHOOTER_ACTIVITY)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -38,9 +37,9 @@ class MainActivity : AppCompatActivity() {
                     val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, savedImageUri)
                     ivPhoto.setImageBitmap(bitmap)
 
-//                    val intent = Intent(this, MergeActivity::class.java)
-//                    intent.data = data?.data
-//                    startActivity(intent)
+                    val intent = Intent(this, MergeActivity::class.java)
+                    intent.data = data?.data
+                    startActivity(intent)
                 }
             }
         }
