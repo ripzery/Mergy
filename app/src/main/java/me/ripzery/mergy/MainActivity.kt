@@ -3,12 +3,13 @@ package me.ripzery.mergy
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import me.ripzery.shooter.ShooterActivity
-import android.provider.MediaStore
-import android.graphics.Bitmap
+import com.crashlytics.android.Crashlytics
+import io.fabric.sdk.android.Fabric
 
 
 
@@ -19,14 +20,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Fabric.with(this, Crashlytics())
 
 //        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.test_9)
 //        val bgcutter: BgCutter = BgCutter(bitmap)
 //        ivGreenPhoto.setImageBitmap(bgcutter.removeGreen())
 
-        btnTakeAPhoto.setOnClickListener {
-            startActivityForResult(Intent(this, ShooterActivity::class.java), RESULT_SHOOTER_ACTIVITY)
-        }
+        startActivityForResult(Intent(this, ShooterActivity::class.java), RESULT_SHOOTER_ACTIVITY)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -37,6 +37,10 @@ class MainActivity : AppCompatActivity() {
                     val savedImageUri = data?.data
                     val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, savedImageUri)
                     ivPhoto.setImageBitmap(bitmap)
+
+//                    val intent = Intent(this, MergeActivity::class.java)
+//                    intent.data = data?.data
+//                    startActivity(intent)
                 }
             }
         }

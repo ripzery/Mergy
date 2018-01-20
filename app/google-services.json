@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "936931633475",
+    "firebase_url": "https://mergy-525d3.firebaseio.com",
+    "project_id": "mergy-525d3",
+    "storage_bucket": "mergy-525d3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:936931633475:android:49733499812649c4",
+        "android_client_info": {
+          "package_name": "me.ripzery.mergy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "936931633475-nn5vm959l2negqpiflfuvsmuci1j378o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD117lC3SDB90uAlsMzQR6LfYv3fbJ1DLw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

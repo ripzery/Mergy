@@ -3,15 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="me.ripzery.mergy.MainActivity">
-    
+    tools:context="me.ripzery.mergy.MergeActivity">
+
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/ivPhoto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:adjustViewBounds="true"
-        android:minHeight="300dp"
-        android:scaleType="centerInside" />
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:layout_gravity="center" />
 
 </FrameLayout>

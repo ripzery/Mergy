@@ -13,6 +13,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.widget.ImageView
 import kotlinx.android.synthetic.main.activity_shooter.*
 import me.ripzery.bgcutter.BgCutter
@@ -98,11 +99,13 @@ class ShooterActivity : AppCompatActivity() {
         val bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions)
         val adjustAngleBitmap = adjustOrientation(bitmap)
         val bgcutter = BgCutter(adjustAngleBitmap)
+        btnTakeAPhoto.visibility = View.GONE
         bgcutter.removeGreen({
             target.setImageBitmap(it)
         }) {
             // onCompleted
             // TODO: Save image to the device
+            btnTakeAPhoto.visibility = View.VISIBLE
             it.setHasAlpha(true)
             val bitmapKeeper = BitmapKeeper(it)
             val savedImageUri = bitmapKeeper.save(this)

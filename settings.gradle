@@ -1,1 +1,1 @@
-include ':app', ':bgcutter', ':shooter', ':bitmapkeeper'
+include ':app', ':bgcutter', ':shooter', ':bitmapkeeper', ':bitmapmerger'
