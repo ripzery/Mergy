@@ -28,9 +28,9 @@ class MainActivity : AppCompatActivity() {
 
 //        startActivity(Intent(this, DragActivity::class.java))
 
-//        startActivityForResult(Intent(this, ShooterActivity::class.java), RESULT_SHOOTER_ACTIVITY)
-        val intent = Intent(this, MergeActivity::class.java)
-        startActivity(intent)
+        startActivityForResult(Intent(this, ShooterActivity::class.java), RESULT_SHOOTER_ACTIVITY)
+//        val intent = Intent(this, MergeActivity::class.java)
+//        startActivity(intent)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -9,6 +9,7 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
         android:layout_gravity="center">
 
         <com.github.chrisbanes.photoview.PhotoView
@@ -20,6 +21,7 @@
 
         <me.ripzery.mergy.ScalableLayout
             android:id="@+id/scalableLayout"
+            android:layout_gravity="start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

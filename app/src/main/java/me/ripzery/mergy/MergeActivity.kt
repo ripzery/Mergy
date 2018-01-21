@@ -2,6 +2,7 @@ package me.ripzery.mergy
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.util.TypedValue
@@ -22,8 +23,8 @@ class MergeActivity : AppCompatActivity() {
         val bitmap1 = BitmapFactory.decodeResource(resources, R.drawable.bg)
 
         /* draggable image */
-//        val bitmap2 = MediaStore.Images.Media.getBitmap(this.contentResolver, intent.data)
-        val bitmap2 = BitmapFactory.decodeResource(resources, R.drawable.minion)
+        val bitmap2 = MediaStore.Images.Media.getBitmap(this.contentResolver, intent.data)
+//        val bitmap2 = BitmapFactory.decodeResource(resources, R.drawable.minion)
         ivPhoto.setImageBitmap(bitmap1)
 
         /* Initialize the merger */
