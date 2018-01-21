@@ -2,6 +2,7 @@ package me.ripzery.mergy
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.util.Log
@@ -21,73 +22,95 @@ import android.widget.RelativeLayout
 class ScalableLayout constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : RelativeLayout(context, attrs, defStyleAttr) {
+    private lateinit var imageView: ImageView
+    private lateinit var viewContainer: View
+    private lateinit var ivResize: ImageView
     private var mScaleFactor = 1f
     private var mMinimumWidth = 0.0f
     private var xDelta = 0.0f
     private var yDelta = 0.0f
-    private var mCenterLayoutX = 0.0f
-    private var mCenterLayoutY = 0.0f
-    private var mPosX = 0.0f
-    private var mPosY = 0.0f
-    //    private var mRightBottomX = 0.0f
-//    private var mRightBottomY = 0.0f
+    private var mCenterLayout = 0.0f to 0.0f
+    private var mPos: Pair<Float, Float> = 0.0f to 0.0f
     private var radius = 0.0
 
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0) {
         init()
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private fun init() {
-        val viewContainer = View.inflate(context, R.layout.scalable_layout, this)
-        val draggableImageView = viewContainer.findViewById<ImageView>(R.id.draggableImageView)
-        val ivResize = viewContainer.findViewById<ImageView>(R.id.ivResize)
+        viewContainer = View.inflate(context, R.layout.scalable_layout, this)
+        imageView = viewContainer.findViewById(R.id.imageView)
+        ivResize = viewContainer.findViewById(R.id.ivResize)
 
         ivResize.setOnTouchListener { view, motionEvent ->
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    if(mMinimumWidth == 0.0f){
-                        mMinimumWidth = viewContainer.measuredWidth.toFloat() * 0.5f
+                    if (mMinimumWidth == 0.0f) {
+                        mMinimumWidth = viewContainer.measuredWidth.toFloat() * 0.3f
                     }
-                    mCenterLayoutX = (viewContainer.left + viewContainer.right) / 2.0f
-                    mCenterLayoutY = (viewContainer.bottom + viewContainer.top) / 2.0f
-                    mPosX = motionEvent.rawX - ivResize.x + mCenterLayoutX
-                    mPosY = motionEvent.rawY - ivResize.y + mCenterLayoutY
-
+                    mCenterLayout = viewContainer.half()
+                    mPos = motionEvent.rawX - ivResize.x + mCenterLayout.first to motionEvent.rawY - ivResize.y + mCenterLayout.second
                     mScaleFactor = viewContainer.scaleX
-
-                    radius = Math.hypot((motionEvent.rawX - mPosX).toDouble(), (motionEvent.rawY - mPosY).toDouble())
-
-                    Log.d("Measure", "${measuredWidth * scaleX}, ${measuredHeight * scaleY}")
-                    Log.d("CenterLayout", "$mCenterLayoutX,$mCenterLayoutY")
-                    Log.d("Radius", "$radius")
+                    radius = Math.hypot(motionEvent.diffX(mPos.first), motionEvent.diffY(mPos.second))
+                    true
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    val newR = Math.hypot((motionEvent.rawX - mPosX).toDouble(), (motionEvent.rawY - mPosY).toDouble())
-                    val newScaleFactor = newR / radius * mScaleFactor
-                    Log.d("Scale", newScaleFactor.toString())
-                    Log.d("MinimumWidth", mMinimumWidth.toString())
-                    if (viewContainer.width * newScaleFactor.toFloat() > mMinimumWidth) {
-                        viewContainer.scaleX = newScaleFactor.toFloat()
-                        viewContainer.scaleY = newScaleFactor.toFloat()
+                    val newR = Math.hypot(motionEvent.diffX(mPos.first), motionEvent.diffY(mPos.second))
+                    val newScaleFactor = (newR / radius * mScaleFactor).toFloat()
+                    if (viewContainer.width * newScaleFactor > mMinimumWidth) {
+                        viewContainer.setScale(newScaleFactor)
                     }
+                    true
                 }
+                else -> false
             }
-//            Log.d("Position", "${motionEvent.x}, ${motionEvent.y}")
-            true
         }
 
-        draggableImageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.minion))
+        imageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.minion))
     }
 
-    private fun isScaleUp(centerX: Float, centerY: Float, radius: Double, posX: Float, posY: Float): Boolean {
-        val distanceTouch = Math.sqrt(Math.pow((posX - centerX).toDouble(), 2.0) + Math.pow((posY - centerY).toDouble(), 2.0))
-        return distanceTouch > radius
+    fun getViewTop(view: View, target: View): Float {
+        Log.d("ViewTop", "${view.javaClass.name} ${view.y + view.paddingTop}")
+        return if (view.parent == target) {
+            view.y
+        } else {
+            view.y + getViewTop(view.parent as View, target)
+        }
     }
 
-    private fun calculateScaleFactor(centerX: Float, centerY: Float, mTouchX: Float, mTouchY: Float, radius: Float): Double {
-        return Math.sqrt(Math.pow((mTouchX - centerX).toDouble(), 2.0) + Math.pow((mTouchY - centerY).toDouble(), 2.0)) / radius
+    fun getViewLeft(view: View, target: View): Float {
+        Log.d("ViewLeft", "${view.javaClass.name} ${view.left}")
+        Log.d("ViewX", "${view.javaClass.name} ${view.x}")
+        Log.d("ViewPaddingX", "${view.javaClass.name} ${view.paddingLeft}")
+        Log.d("ViewTranslationX", "${view.javaClass.name} ${view.translationX}")
+        return if (view.parent == target) {
+            view.x
+        } else {
+            view.x + getViewLeft(view.parent as View, target)
+        }
     }
+
+    fun getImageWidth(): Int {
+        Log.d("Right", "${this.imageView.right * scaleX}")
+        return this.imageView.right
+    }
+
+    fun getImageHeight() = this.imageView.height
+
+    fun setImage(bitmap: Bitmap) {
+        imageView.setImageBitmap(bitmap)
+    }
+
+    private fun View.halfWidth() = (this.left + this.right) / 2.0f
+    private fun View.halfHeight() = (this.top + this.bottom) / 2.0f
+    private fun View.half() = halfWidth() to halfHeight()
+    private fun View.setScale(scale: Float) {
+        scaleX = scale
+        scaleY = scale
+    }
+
+    private fun MotionEvent.diffX(x: Float) = (rawX - x).toDouble()
+    private fun MotionEvent.diffY(y: Float) = (rawY - y).toDouble()
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -99,15 +122,17 @@ class ScalableLayout constructor(
             MotionEvent.ACTION_DOWN -> {
                 xDelta = x - event.rawX
                 yDelta = y - event.rawY
-                Log.d("X and Y", "$x and $y")
-                Log.d("RawX and RawY", "${event.rawX} and ${event.rawY}")
+                return true
             }
-            MotionEvent.ACTION_MOVE ->
+            MotionEvent.ACTION_MOVE -> {
                 animate()
                         .x(event.rawX + xDelta)
                         .y(event.rawY + yDelta)
                         .setDuration(0)
                         .start()
+                Log.d("Translate", translationX.toString())
+                return true
+            }
             else -> return false
         }
         return true

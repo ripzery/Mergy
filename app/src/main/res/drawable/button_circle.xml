@@ -5,7 +5,7 @@
             android:padding="24dp"
             android:shape="oval">
             <solid android:color="#FF0000" />
-            <size android:width="50dp" android:height="50dp" />
+            <size android:width="40dp" android:height="40dp" />
             <corners
                 android:bottomLeftRadius="5dp"
                 android:bottomRightRadius="5dp"

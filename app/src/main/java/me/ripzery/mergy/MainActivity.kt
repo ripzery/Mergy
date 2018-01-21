@@ -2,6 +2,7 @@ package me.ripzery.mergy
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
@@ -9,6 +10,8 @@ import android.widget.Toast
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_main.*
+import me.ripzery.bgcutter.BgCutter
+import me.ripzery.shooter.ShooterActivity
 
 
 class MainActivity : AppCompatActivity() {
@@ -23,9 +26,11 @@ class MainActivity : AppCompatActivity() {
 //        val bgcutter: BgCutter = BgCutter(bitmap)
 //        ivPhoto.setImageBitmap(bgcutter.removeGreen())
 
-        startActivity(Intent(this, DragActivity::class.java))
+//        startActivity(Intent(this, DragActivity::class.java))
 
 //        startActivityForResult(Intent(this, ShooterActivity::class.java), RESULT_SHOOTER_ACTIVITY)
+        val intent = Intent(this, MergeActivity::class.java)
+        startActivity(intent)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

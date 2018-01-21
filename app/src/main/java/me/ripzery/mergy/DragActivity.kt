@@ -9,11 +9,9 @@ class DragActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_drag)
-        Sensey.getInstance().init(this)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Sensey.getInstance().stop()
     }
 }
