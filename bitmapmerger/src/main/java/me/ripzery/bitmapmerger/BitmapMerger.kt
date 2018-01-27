@@ -15,15 +15,18 @@ import android.util.Log
  */
 
 class BitmapMerger(private val bitmap1: Bitmap, private val bitmap2: Bitmap) {
-    fun merge(context: Context, width: Int, height: Int, left: Int, top: Int, right: Int, bottom: Int): Bitmap {
-        Log.d("MergedBitmap", "$width, $height")
-        Log.d("DicutImage", "($left, $top), ($right, $bottom)")
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+    fun merge(context: Context, position: Position): Bitmap {
+        Log.d("MergedBitmap", "${position.canvasSize.x}, ${position.canvasSize.y}")
+        val bitmap = Bitmap.createBitmap(position.canvasSize.x, position.canvasSize.y, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         val drawable1 = BitmapDrawable(context.resources, bitmap1)
         val drawable2 = BitmapDrawable(context.resources, bitmap2)
-        drawable1.setBounds(0, 0, width, height)
-        drawable2.setBounds(left, top, right, bottom)
+        drawable1.setBounds(0, 0, position.canvasSize.x, position.canvasSize.y)
+        drawable2.setBounds(
+                position.dicutFrame.left,
+                position.dicutFrame.top,
+                position.dicutFrame.right,
+                position.dicutFrame.bottom)
         drawable1.draw(canvas)
         drawable2.draw(canvas)
         return bitmap
