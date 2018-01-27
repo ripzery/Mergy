@@ -110,7 +110,6 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, Backgr
     }
 
     private fun changeBackground(bitmap: Bitmap) {
-        mBitmapBG = bitmap
         Glide.with(this).load(bitmap).into(ivPhoto)
     }
 
@@ -137,6 +136,10 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, Backgr
     override fun getStickerLayout(): ScalableLayout = scalableLayout
 
     override fun onBackgroundSelected(bg: Bitmap) {
+        mBitmapBG = bg
         changeBackground(bg)
+        scalableLayout.visibility = View.VISIBLE
+        mMenuSave?.isVisible = true
+        mMenuCancel?.isVisible = false
     }
 }

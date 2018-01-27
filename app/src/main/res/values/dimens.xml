@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="backgroundHeight">180dp</dimen>
+    <dimen name="backgroundWidth">260dp</dimen>
+    <dimen name="captionHeight">48dp</dimen>
+    <dimen name="textHeight">18sp</dimen>
+</resources>
