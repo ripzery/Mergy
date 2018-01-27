@@ -8,7 +8,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
-import me.ripzery.mergy.extensions.logd
 
 
 /**
