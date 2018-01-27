@@ -28,10 +28,7 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_merge)
-
         initInstance()
-
-
     }
 
     private fun initInstance() {
