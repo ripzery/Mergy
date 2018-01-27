@@ -7,16 +7,20 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import kotlinx.android.synthetic.main.activity_merge.*
 import kotlinx.android.synthetic.main.layout_toolbar.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 import me.ripzery.bitmapkeeper.BitmapKeeper
 import me.ripzery.bitmapmerger.BitmapMerger
 import me.ripzery.bitmapmerger.Position
 import me.ripzery.mergy.R
 import me.ripzery.mergy.ScalableLayout
 import me.ripzery.mergy.extensions.toast
+import org.jetbrains.anko.coroutines.experimental.bg
 
 
 class MergeActivity : AppCompatActivity(), PositionManagerInterface.View {
@@ -25,6 +29,9 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View {
     private val mSticker by lazy {
         MediaStore.Images.Media.getBitmap(this.contentResolver, intent.data)
     }
+    private var mMenuSave: MenuItem? = null
+    private var mMenuCancel: MenuItem? = null
+
     private lateinit var mBitmapBG: Bitmap
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,30 +48,55 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View {
         mBitmapBG = BitmapFactory.decodeResource(resources, R.drawable.bg)
         changeBackground(mBitmapBG)
         scalableLayout.setImage(mSticker)
-
-        btnCancel.setOnClickListener {
-            scalableLayout.visibility = View.VISIBLE
-            changeBackground(mBitmapBG)
-        }
-
-        btnSave.setOnClickListener {
-            scalableLayout.visibility = View.GONE
-            val newBitmap = merge(mBitmapBG, mSticker)
-            changeBackground(newBitmap)
-            saveToDevice(newBitmap)
-            toast("Saved image successfully.")
-        }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_merge, menu)
+        mMenuSave = menu?.findItem(R.id.menu_save)
+        mMenuCancel = menu?.findItem(R.id.menu_cancel)
+        return true
+    }
+
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             android.R.id.home -> finish()
+            R.id.menu_save -> {
+                mMenuSave?.isVisible = false
+                mMenuCancel?.isVisible = true
+                mMenuCancel?.isEnabled = false
+                scalableLayout.visibility = View.GONE
+                progressBar.visibility = View.VISIBLE
+                setPhotoAlpha(0.7f)
+                async(UI) {
+                    val bgTask = bg {
+                        val newBitmap = merge(mBitmapBG, mSticker)
+                        saveToDevice(newBitmap)
+                        newBitmap
+                    }
+                    changeBackground(bgTask.await())
+                    setPhotoAlpha(1.0f)
+                    toast("Saved image successfully.")
+                    progressBar?.visibility = View.GONE
+                    mMenuCancel?.isEnabled = true
+                }
+            }
+            R.id.menu_cancel -> {
+                scalableLayout.visibility = View.VISIBLE
+                changeBackground(mBitmapBG)
+                mMenuSave?.isVisible = true
+                mMenuCancel?.isVisible = false
+            }
         }
         return true
     }
 
     private fun changeBackground(bitmap: Bitmap) {
         ivPhoto.setImageBitmap(bitmap)
+    }
+
+    private fun setPhotoAlpha(alpha: Float) {
+        ivPhoto.alpha = alpha
     }
 
     private fun merge(background: Bitmap, sticker: Bitmap): Bitmap {

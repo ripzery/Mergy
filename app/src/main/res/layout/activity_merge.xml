@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@color/colorPrimaryDark">
+            android:background="@color/colorBackgroundImage">
 
             <com.github.chrisbanes.photoview.PhotoView
                 android:id="@+id/ivPhoto"
@@ -34,23 +34,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start" />
 
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:visibility="gone"
+                android:layout_gravity="center" />
+
         </FrameLayout>
-
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginBottom="16dp"
-            android:text="Save" />
-
-        <Button
-            android:id="@+id/btnCancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:layout_marginBottom="16dp"
-            android:text="Cancel" />
 
     </FrameLayout>
 

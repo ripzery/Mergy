@@ -16,7 +16,6 @@ import android.util.Log
 
 class BitmapMerger(private val bitmap1: Bitmap, private val bitmap2: Bitmap) {
     fun merge(context: Context, position: Position): Bitmap {
-        Log.d("MergedBitmap", "${position.canvasSize.x}, ${position.canvasSize.y}")
         val bitmap = Bitmap.createBitmap(position.canvasSize.x, position.canvasSize.y, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         val drawable1 = BitmapDrawable(context.resources, bitmap1)
