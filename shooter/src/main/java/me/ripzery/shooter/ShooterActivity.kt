@@ -1,15 +1,10 @@
 package me.ripzery.shooter
 
-import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
-import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -18,8 +13,6 @@ import kotlinx.android.synthetic.main.activity_shooter.*
 import me.ripzery.bgcutter.BgCutter
 import me.ripzery.bitmapkeeper.BitmapKeeper
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 /**
@@ -32,83 +25,48 @@ import java.util.*
 class ShooterActivity : AppCompatActivity() {
     val REQUEST_IMAGE_CAPTURE = 1
     lateinit var mCurrentPhotoPath: String
+    lateinit var mImageUri: Uri
+    private val mBitmapOptimizer by lazy { BitmapOptimizer(mCurrentPhotoPath) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shooter)
-        btnTakeAPhoto.setOnClickListener {
-            dispatchTakePictureIntent()
-        }
+        title = "Processing..."
+        dispatchTakePictureIntent()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            galleryAddPic()
-            setPic(ivGreenPhoto, data) {
-                val intent = Intent()
-                intent.data = it
-                setResult(Activity.RESULT_OK, intent)
+            mCurrentPhotoPath = getRealPathFromURI(mImageUri)
+            broadcastImageCreated()
+            setCapturedImage(ivGreenPhoto) { result ->
+                val resultIntent = Intent().apply { setData(result) }
+                setResult(Activity.RESULT_OK, resultIntent)
                 finish()
             }
         }
     }
 
-    private fun galleryAddPic() {
-        val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-        val f = File(mCurrentPhotoPath)
-        val contentUri = Uri.fromFile(f)
-        mediaScanIntent.data = contentUri
-        this.sendBroadcast(mediaScanIntent)
+    private fun getRealPathFromURI(contentUri: Uri): String {
+        val proj = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = managedQuery(contentUri, proj, null, null, null)
+        val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        cursor.moveToFirst()
+        return cursor.getString(columnIndex)
     }
 
-    private fun adjustOrientation(bitmap: Bitmap): Bitmap {
-        val ei = ExifInterface(mCurrentPhotoPath)
-        val orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                ExifInterface.ORIENTATION_UNDEFINED)
+    private fun setCapturedImage(target: ImageView, onCompleted: (Uri) -> Unit) {
+        // Visible the preview image
+        ivGreenPhoto.visibility = View.VISIBLE
 
-        return when (orientation) {
-            ExifInterface.ORIENTATION_ROTATE_90 -> rotateImage(bitmap, 90f)
-            ExifInterface.ORIENTATION_ROTATE_180 -> rotateImage(bitmap, 180f)
-            ExifInterface.ORIENTATION_ROTATE_270 -> rotateImage(bitmap, 270f)
-            ExifInterface.ORIENTATION_NORMAL -> bitmap
-            else -> bitmap
-        }
-    }
+        // Optimize the image
+        val optimizedBitmap = mBitmapOptimizer.optimize(target.maxHeight)
 
-    private fun setPic(target: ImageView, data: Intent, onCompleted: (Uri) -> Unit) {
-        // Get the dimensions of the View
-        val targetW = target.width
-        val targetH = target.height
+        val bgCutter = BgCutter(optimizedBitmap)
 
-        // Get the dimensions of the bitmap
-        val bmOptions = BitmapFactory.Options()
-        bmOptions.inJustDecodeBounds = true
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions)
-        val photoW = bmOptions.outWidth
-        val photoH = bmOptions.outHeight
-
-        // Determine how much to scale down the image
-        val scaleFactor = Math.min(photoW / targetW, photoH / targetH)
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false
-        bmOptions.inSampleSize = scaleFactor
-        bmOptions.inPurgeable = true
-
-        val bitmap = try {
-            BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions) ?: throw NullPointerException()
-        } catch (npe: NullPointerException) {
-            data.extras.get("data") as Bitmap
-        }
-        val adjustAngleBitmap = adjustOrientation(bitmap)
-        val bgcutter = BgCutter(adjustAngleBitmap)
-        btnTakeAPhoto.visibility = View.GONE
-        bgcutter.removeGreen({
+        bgCutter.removeGreen({
             target.setImageBitmap(it)
         }) {
-            // onCompleted
-            // TODO: Save image to the device
-            btnTakeAPhoto.visibility = View.VISIBLE
             it.setHasAlpha(true)
             val bitmapKeeper = BitmapKeeper(it)
             val savedImageUri = bitmapKeeper.save(this)
@@ -116,46 +74,24 @@ class ShooterActivity : AppCompatActivity() {
         }
     }
 
-    private fun rotateImage(source: Bitmap, angle: Float): Bitmap {
-        val matrix = Matrix()
-        matrix.postRotate(angle)
-        return Bitmap.createBitmap(source, 0, 0, source.width, source.height,
-                matrix, true)
-    }
-
-    // TODO: Should make photo saved folder public!
-    @SuppressLint("SimpleDateFormat")
-    private fun createImageFile(): File {
-        // Create an image file name
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val imageFileName = "JPEG_" + timeStamp + "_"
-        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val image = File.createTempFile(
-                imageFileName, /* prefix */
-                ".jpg", /* suffix */
-                storageDir      /* directory */
-        )
-
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.absolutePath
-        return image
-    }
-
     private fun dispatchTakePictureIntent() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (takePictureIntent.resolveActivity(packageManager) != null) {
-            var mFilePhoto: File? = null
-            try {
-                mFilePhoto = createImageFile()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            if (mFilePhoto != null) {
-//                val photoURI = FileProvider.getUriForFile(this, "me.ripzery.mergy.fileprovider", mFilePhoto)
-//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-            }
+        val values = ContentValues()
+        with(values) {
+            put(MediaStore.Images.Media.TITLE, ImageDataCreator.createName())
+            put(MediaStore.Images.Media.DESCRIPTION, ImageDataCreator.createName())
         }
+
+        mImageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri)
+        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
     }
 
+    private fun broadcastImageCreated() {
+        val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+        val f = File(mCurrentPhotoPath)
+        val contentUri = Uri.fromFile(f)
+        mediaScanIntent.data = contentUri
+        this.sendBroadcast(mediaScanIntent)
+    }
 }

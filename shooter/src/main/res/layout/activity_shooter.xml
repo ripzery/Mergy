@@ -3,21 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btnTakeAPhoto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|center_horizontal"
-        android:layout_marginTop="16dp"
-        android:text="Take a photo" />
-
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/ivGreenPhoto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:adjustViewBounds="true"
+        android:background="@color/colorBackgroundImage"
+        android:maxHeight="450dp"
         android:minHeight="300dp"
-        android:scaleType="centerInside" />
+        android:visibility="gone"
+        android:scaleType="fitEnd" />
 
 </FrameLayout>
