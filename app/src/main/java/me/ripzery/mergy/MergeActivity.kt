@@ -4,15 +4,15 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewTreeObserver
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_merge.*
 import kotlinx.android.synthetic.main.scalable_layout.view.*
 import me.ripzery.bitmapkeeper.BitmapKeeper
 import me.ripzery.bitmapmerger.BitmapMerger
+import me.ripzery.mergy.extensions.logd
+import me.ripzery.mergy.extensions.toast
 
 
 class MergeActivity : AppCompatActivity() {
@@ -52,13 +52,13 @@ class MergeActivity : AppCompatActivity() {
             val top = (scalableLayout.getViewTop(scalableLayout.imageView, container) - adjustTopAmount) * ratioHeightDrawableToScreen
             val right = (left + scalableLayout.getImageWidth() * scalableLayout.scaleX * ratioWidthDrawableToScreen)
             val bottom = (top + scalableLayout.getImageHeight() * scalableLayout.scaleY * ratioHeightDrawableToScreen)
-            Log.d("Position", "$left, $top, $right, $bottom")
+            logd("$left, $top, $right, $bottom")
             val mergedBitmap = bitmapMerger.merge(this@MergeActivity, finalWidth, finalHeight, left.toInt(), top.toInt(), right.toInt(), bottom.toInt())
             ivPhoto.setImageBitmap(mergedBitmap)
             scalableLayout.visibility = View.GONE
             val bitmapKeeper = BitmapKeeper(mergedBitmap)
             val savedImageUri = bitmapKeeper.save(this)
-            Toast.makeText(this, "Saved image successfully.", Toast.LENGTH_SHORT).show()
+            toast("Saved image successfully.")
         }
         vto.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {

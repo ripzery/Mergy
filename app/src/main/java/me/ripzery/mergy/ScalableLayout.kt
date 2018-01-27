@@ -10,6 +10,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
+import me.ripzery.mergy.extensions.logd
 
 
 /**
@@ -70,7 +71,7 @@ class ScalableLayout constructor(
     }
 
     fun getViewTop(view: View, target: View): Float {
-        Log.d("ViewTop", "${view.javaClass.name} ${view.y + view.paddingTop}")
+        logd("ViewTop: ${view.javaClass.name} ${view.y + view.paddingTop}")
         return if (view.parent == target) {
             view.y
         } else {
@@ -87,7 +88,7 @@ class ScalableLayout constructor(
     }
 
     fun getImageWidth(): Int {
-        Log.d("Right", "${this.imageView.right * scaleX}")
+        logd("Right: ${this.imageView.right * scaleX}")
         return this.imageView.right
     }
 
@@ -126,7 +127,7 @@ class ScalableLayout constructor(
                         .y(event.rawY + yDelta)
                         .setDuration(0)
                         .start()
-                Log.d("Translate", translationX.toString())
+                logd("Translate ${translationX.toString()}")
                 return true
             }
             else -> return false
