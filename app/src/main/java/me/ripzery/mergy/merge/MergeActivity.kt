@@ -16,7 +16,6 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import me.ripzery.bitmapkeeper.BitmapKeeper
 import me.ripzery.bitmapmerger.BitmapMerger
-import me.ripzery.bitmapmerger.Position
 import me.ripzery.mergy.R
 import me.ripzery.mergy.ScalableLayout
 import me.ripzery.mergy.extensions.toast
@@ -24,8 +23,8 @@ import org.jetbrains.anko.coroutines.experimental.bg
 
 
 class MergeActivity : AppCompatActivity(), PositionManagerInterface.View {
-    private val mPositionManager by lazy { PositionManager(this) }
-    private val mPosition: Position by lazy { mPositionManager.getPosition() }
+    private val mPosition
+        get() = PositionManager(this).getPosition()
     private val mSticker by lazy {
         MediaStore.Images.Media.getBitmap(this.contentResolver, intent.data)
     }
