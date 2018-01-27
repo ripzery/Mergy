@@ -15,7 +15,9 @@ import android.media.ExifInterface
 
 class BitmapOptimizer(private val photoPath: String) {
     private val mBitmapScaler by lazy { BitmapScaler() }
-    private val mBitmap by lazy { BitmapFactory.decodeFile(photoPath) }
+    private val mBitmap
+        get() = BitmapFactory.decodeFile(photoPath)
+
     fun optimize(height: Int): Bitmap {
         val adjustAngleBitmap = adjustOrientation(photoPath, mBitmap)
         val resizedBitmap = mBitmapScaler.scaleToFitWidth(adjustAngleBitmap, height)
