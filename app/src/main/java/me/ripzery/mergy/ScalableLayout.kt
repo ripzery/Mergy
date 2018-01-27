@@ -1,11 +1,9 @@
 package me.ripzery.mergy
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
@@ -43,35 +41,40 @@ class ScalableLayout constructor(
         imageView = viewContainer.findViewById(R.id.imageView)
         ivResize = viewContainer.findViewById(R.id.ivResize)
 
-        ivResize.setOnTouchListener { view, motionEvent ->
-            when (motionEvent.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    if (mMinimumWidth == 0.0f) {
-                        mMinimumWidth = viewContainer.measuredWidth.toFloat() * 0.3f
-                    }
-                    mCenterLayout = viewContainer.half()
-                    mPos = motionEvent.rawX - ivResize.x + mCenterLayout.first to motionEvent.rawY - ivResize.y + mCenterLayout.second
-                    mScaleFactor = viewContainer.scaleX
-                    radius = Math.hypot(motionEvent.diffX(mPos.first), motionEvent.diffY(mPos.second))
-                    true
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    val newR = Math.hypot(motionEvent.diffX(mPos.first), motionEvent.diffY(mPos.second))
-                    val newScaleFactor = (newR / radius * mScaleFactor).toFloat()
-                    if (viewContainer.width * newScaleFactor > mMinimumWidth) {
-                        viewContainer.setScale(newScaleFactor)
-                    }
-                    true
-                }
-                else -> false
-            }
+        ivResize.setOnTouchListener { _, motionEvent ->
+            handleResizeTouch(motionEvent)
         }
 
         imageView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.minion))
     }
 
+    private fun handleResizeTouch(motionEvent: MotionEvent): Boolean {
+        return when (motionEvent.action) {
+            MotionEvent.ACTION_DOWN -> {
+                if (mMinimumWidth == 0.0f) {
+                    mMinimumWidth = viewContainer.measuredWidth.toFloat() * 0.3f
+                }
+                mCenterLayout = viewContainer.half()
+                val posX = motionEvent.rawX - ivResize.x + mCenterLayout.first
+                val posY = motionEvent.rawY - ivResize.y + mCenterLayout.second
+                mPos = Pair(posX, posY)
+                mScaleFactor = viewContainer.scaleX
+                radius = Math.hypot(motionEvent.diffX(mPos.first), motionEvent.diffY(mPos.second))
+                true
+            }
+            MotionEvent.ACTION_MOVE -> {
+                val newR = Math.hypot(motionEvent.diffX(mPos.first), motionEvent.diffY(mPos.second))
+                val newScaleFactor = (newR / radius * mScaleFactor).toFloat()
+                if (viewContainer.width * newScaleFactor > mMinimumWidth) {
+                    viewContainer.setScale(newScaleFactor)
+                }
+                true
+            }
+            else -> false
+        }
+    }
+
     fun getViewTop(view: View, target: View): Float {
-        logd("ViewTop: ${view.javaClass.name} ${view.y + view.paddingTop}")
         return if (view.parent == target) {
             view.y
         } else {
@@ -88,7 +91,6 @@ class ScalableLayout constructor(
     }
 
     fun getImageWidth(): Int {
-        logd("Right: ${this.imageView.right * scaleX}")
         return this.imageView.right
     }
 
@@ -105,21 +107,19 @@ class ScalableLayout constructor(
         scaleX = scale
         scaleY = scale
     }
-
     private fun MotionEvent.diffX(x: Float) = (rawX - x).toDouble()
     private fun MotionEvent.diffY(y: Float) = (rawY - y).toDouble()
 
-    @SuppressLint("ClickableViewAccessibility")
+    /***
+     * RawX, RawY are the absolute coordinate to the screen
+     * x, y are the coordinate relative to the parent layout
+     */
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        /***
-         * RawX, RawY are the absolute coordinate to the screen
-         * x, y are the coordinate relative to the parent layout
-         */
-        when (event!!.action) {
+        return when (event!!.action) {
             MotionEvent.ACTION_DOWN -> {
                 xDelta = x - event.rawX
                 yDelta = y - event.rawY
-                return true
+                true
             }
             MotionEvent.ACTION_MOVE -> {
                 animate()
@@ -127,11 +127,9 @@ class ScalableLayout constructor(
                         .y(event.rawY + yDelta)
                         .setDuration(0)
                         .start()
-                logd("Translate ${translationX.toString()}")
-                return true
+                true
             }
-            else -> return false
+            else -> false
         }
-        return true
     }
 }

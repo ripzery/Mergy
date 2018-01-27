@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.view.ViewTreeObserver
+import android.widget.ImageView
 import kotlinx.android.synthetic.main.activity_merge.*
 import me.ripzery.bitmapkeeper.BitmapKeeper
 import me.ripzery.bitmapmerger.BitmapMerger
@@ -20,7 +20,7 @@ import me.ripzery.mergy.extensions.toast
 
 class MergeActivity : AppCompatActivity(), PositionManagerInterface.View {
     private val mPositionManager by lazy { PositionManager(this) }
-    private val mPosition: Position = mPositionManager.getPosition()
+    private val mPosition: Position by lazy { mPositionManager.getPosition() }
     private val mSticker by lazy {
         MediaStore.Images.Media.getBitmap(this.contentResolver, intent.data)
     }
@@ -69,6 +69,7 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View {
 
     /* Override interface */
     override fun getContainer(): View = container
+
     override fun getImageDrawable(): Drawable = ivPhoto.drawable
     override fun getStickerLayout(): ScalableLayout = scalableLayout
 }
