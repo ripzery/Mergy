@@ -7,9 +7,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
 import kotlinx.android.synthetic.main.activity_merge.*
+import kotlinx.android.synthetic.main.layout_toolbar.*
 import me.ripzery.bitmapkeeper.BitmapKeeper
 import me.ripzery.bitmapmerger.BitmapMerger
 import me.ripzery.bitmapmerger.Position
@@ -32,6 +33,10 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View {
     }
 
     private fun initInstance() {
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = "Merge Image"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         /* Initialize background and sticker images */
         mBitmapBG = BitmapFactory.decodeResource(resources, R.drawable.bg)
         changeBackground(mBitmapBG)
@@ -49,6 +54,13 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View {
             saveToDevice(newBitmap)
             toast("Saved image successfully.")
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item!!.itemId) {
+            android.R.id.home -> finish()
+        }
+        return true
     }
 
     private fun changeBackground(bitmap: Bitmap) {

@@ -1,46 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="me.ripzery.mergy.merge.MergeActivity">
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_toolbar" />
 
     <FrameLayout
-        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:layout_gravity="center">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        tools:context="me.ripzery.mergy.merge.MergeActivity">
 
-        <com.github.chrisbanes.photoview.PhotoView
-            android:id="@+id/ivPhoto"
+        <FrameLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:src="@drawable/bg" />
+            android:layout_gravity="center"
+            android:background="@color/colorPrimaryDark">
 
-        <me.ripzery.mergy.ScalableLayout
-            android:id="@+id/scalableLayout"
-            android:layout_gravity="start"
+            <com.github.chrisbanes.photoview.PhotoView
+                android:id="@+id/ivPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/bg" />
+
+            <me.ripzery.mergy.ScalableLayout
+                android:id="@+id/scalableLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start" />
+
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/btnSave"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="16dp"
+            android:text="Save" />
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="16dp"
+            android:text="Cancel" />
 
     </FrameLayout>
 
-    <Button
-        android:id="@+id/btnSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginBottom="16dp"
-        android:text="Save" />
-
-    <Button
-        android:id="@+id/btnCancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_marginBottom="16dp"
-        android:text="Cancel" />
-
-</FrameLayout>
+</LinearLayout>

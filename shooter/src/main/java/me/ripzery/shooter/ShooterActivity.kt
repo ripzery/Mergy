@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ImageView
 import kotlinx.android.synthetic.main.activity_shooter.*
+import kotlinx.android.synthetic.main.layout_toolbar.*
 import me.ripzery.bgcutter.BgCutter
 import me.ripzery.bitmapkeeper.BitmapKeeper
 import java.io.File
@@ -31,6 +32,7 @@ class ShooterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shooter)
+        setSupportActionBar(toolbar)
         title = "Processing..."
         dispatchTakePictureIntent()
     }
