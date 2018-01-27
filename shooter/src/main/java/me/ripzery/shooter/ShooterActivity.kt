@@ -11,7 +11,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ImageView
@@ -45,7 +44,7 @@ class ShooterActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
             galleryAddPic()
-            setPic(ivGreenPhoto) {
+            setPic(ivGreenPhoto, data) {
                 val intent = Intent()
                 intent.data = it
                 setResult(Activity.RESULT_OK, intent)
@@ -76,7 +75,7 @@ class ShooterActivity : AppCompatActivity() {
         }
     }
 
-    private fun setPic(target: ImageView, onCompleted: (Uri) -> Unit) {
+    private fun setPic(target: ImageView, data: Intent, onCompleted: (Uri) -> Unit) {
         // Get the dimensions of the View
         val targetW = target.width
         val targetH = target.height
@@ -96,7 +95,11 @@ class ShooterActivity : AppCompatActivity() {
         bmOptions.inSampleSize = scaleFactor
         bmOptions.inPurgeable = true
 
-        val bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions)
+        val bitmap = try {
+            BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions) ?: throw NullPointerException()
+        } catch (npe: NullPointerException) {
+            data.extras.get("data") as Bitmap
+        }
         val adjustAngleBitmap = adjustOrientation(bitmap)
         val bgcutter = BgCutter(adjustAngleBitmap)
         btnTakeAPhoto.visibility = View.GONE
@@ -148,8 +151,8 @@ class ShooterActivity : AppCompatActivity() {
                 e.printStackTrace()
             }
             if (mFilePhoto != null) {
-                val photoURI = FileProvider.getUriForFile(this, "me.ripzery.mergy.fileprovider", mFilePhoto)
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+//                val photoURI = FileProvider.getUriForFile(this, "me.ripzery.mergy.fileprovider", mFilePhoto)
+//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
             }
         }

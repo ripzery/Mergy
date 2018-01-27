@@ -79,10 +79,6 @@ class ScalableLayout constructor(
     }
 
     fun getViewLeft(view: View, target: View): Float {
-        Log.d("ViewLeft", "${view.javaClass.name} ${view.left}")
-        Log.d("ViewX", "${view.javaClass.name} ${view.x}")
-        Log.d("ViewPaddingX", "${view.javaClass.name} ${view.paddingLeft}")
-        Log.d("ViewTranslationX", "${view.javaClass.name} ${view.translationX}")
         return if (view.parent == target) {
             view.x
         } else {

@@ -25,12 +25,11 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:27.0.2'
-    implementation 'com.flying.xiaopo:sticker:1.6.0'
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
-    implementation 'com.flying.xiaopo:sticker:1.6.0'
-    implementation 'com.github.nisrulz:sensey:1.8.0'
     implementation 'com.github.Almeros:android-gesture-detectors:v1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation ("com.github.bumptech.glide:glide:4.5.0") {
+        exclude group: "com.android.support"
+    }
     compile 'com.google.firebase:firebase-core:11.4.2'
     compile('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
         transitive = true;
@@ -41,6 +40,7 @@ dependencies {
     implementation project(':bgcutter')
     implementation project(':shooter')
     implementation project(':bitmapmerger')
+    compile project(path: ':bitmapkeeper')
 }
 
 apply plugin: 'com.google.gms.google-services'

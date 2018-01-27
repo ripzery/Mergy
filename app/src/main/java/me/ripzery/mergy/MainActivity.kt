@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_main.*
@@ -21,6 +22,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Fabric.with(this, Crashlytics())
+
+        Glide.with(this).load("https://madu-isetan-space.nyc3.digitaloceanspaces.com/50f199fcc445ac144b1416a39286012e.jpg").into(ivPhoto)
+
 
 //        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.test_9)
 //        val bgcutter: BgCutter = BgCutter(bitmap)

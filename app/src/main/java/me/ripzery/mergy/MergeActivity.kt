@@ -8,8 +8,10 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewTreeObserver
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_merge.*
 import kotlinx.android.synthetic.main.scalable_layout.view.*
+import me.ripzery.bitmapkeeper.BitmapKeeper
 import me.ripzery.bitmapmerger.BitmapMerger
 
 
@@ -54,6 +56,9 @@ class MergeActivity : AppCompatActivity() {
             val mergedBitmap = bitmapMerger.merge(this@MergeActivity, finalWidth, finalHeight, left.toInt(), top.toInt(), right.toInt(), bottom.toInt())
             ivPhoto.setImageBitmap(mergedBitmap)
             scalableLayout.visibility = View.GONE
+            val bitmapKeeper = BitmapKeeper(mergedBitmap)
+            val savedImageUri = bitmapKeeper.save(this)
+            Toast.makeText(this, "Saved image successfully.", Toast.LENGTH_SHORT).show()
         }
         vto.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
