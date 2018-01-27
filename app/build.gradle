@@ -32,6 +32,7 @@ dependencies {
     implementation('com.github.bumptech.glide:glide:4.5.0') {
         exclude group: "com.android.support"
     }
+    implementation 'com.android.support:support-v4:27.0.2'
     compile 'com.google.firebase:firebase-core:11.4.2'
     compile('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
         transitive = true;

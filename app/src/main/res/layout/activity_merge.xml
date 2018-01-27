@@ -18,7 +18,7 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_marginTop="128dp"
             android:background="@color/colorBackgroundImage">
 
             <com.github.chrisbanes.photoview.PhotoView
@@ -38,10 +38,16 @@
                 android:id="@+id/progressBar"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:visibility="gone"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:visibility="gone" />
 
         </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/galleryContainer"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_gravity="bottom" />
 
     </FrameLayout>
 
