@@ -26,6 +26,8 @@ class ShareActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_share)
+        mImageUri = Uri.parse(intent.getStringExtra("result"))
+        mCurrentPhoto = intent.getParcelableExtra("photo")
         initInstance()
     }
 
@@ -40,7 +42,18 @@ class ShareActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.title = "Share"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        fetchUsers()
+        previewImage()
+        setupShareBtn()
+    }
 
+    private fun previewImage() {
+        Glide.with(this)
+                .load(mImageUri)
+                .into(ivShare)
+    }
+
+    private fun fetchUsers() {
         val date = Date()
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
 //        val request = Request.RetrieveUsers(dateFormat.format(date))
@@ -55,13 +68,9 @@ class ShareActivity : AppCompatActivity() {
             mSelectedUser = mUsers[position]
         }
 
-        // Load merged image into preview
-        mImageUri = Uri.parse(intent.getStringExtra("result"))
-        mCurrentPhoto = intent.getParcelableExtra("photo")
-        Glide.with(this)
-                .load(mImageUri)
-                .into(ivShare)
+    }
 
+    private fun setupShareBtn() {
         btnShare.setOnClickListener {
             Base64Helper.encrypt(this, mImageUri) {
                 with(mCurrentPhoto) {
