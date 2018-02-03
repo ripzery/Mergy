@@ -58,12 +58,11 @@ object Response {
     @Parcelize
     data class User(
             @SerializedName("user_profile_id") val userProfileId: Int,
-            @SerializedName("fname") val firstName: Int,
-            @SerializedName("lname") val lastName: Int,
-            @SerializedName("gender") val gender: Int,
-            @SerializedName("email") val email: Int,
-            @SerializedName("phone") val phone: Int,
-            @SerializedName("created_by") val createdBy: Int,
+            @SerializedName("fname") val firstName: String,
+            @SerializedName("lname") val lastName: String,
+            @SerializedName("gender") val gender: String,
+            @SerializedName("email") val email: String,
+            @SerializedName("phone") val phone: String,
             @SerializedName("season_id") val seasonId: Int,
             @SerializedName("t_created") val createdDate: Date
     ) : Parcelable

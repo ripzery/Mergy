@@ -47,32 +47,19 @@ object DataProvider {
         mDisposable.add(d)
     }
 
-    fun sendEmail(request: Request.SendEmail, callback: (Response.SendEmail) -> Unit) {
-        val d = ApiService.Isetan.sendEmail(request)
+    fun retrieveUsers(request: Request.RetrieveUsers, callback: (Response.RetrieveUsers) -> Unit) {
+        val d = ApiService.Isetan.retrieveUserInfos(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     callback(it)
                 }, mErrorHandler)
-
-        mDisposable.add(d)
-    }
-
-    fun upload(request: Request.Upload, callback: (Response.Upload) -> Unit) {
-        val d = ApiService.Isetan.upload(request)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    callback(it)
-                }, mErrorHandler)
-
         mDisposable.add(d)
     }
 
     fun uploadThenSendEmail(request: Request.Upload, request2: Request.SendEmail, callback: (Response.SendEmail) -> Unit) {
         val d = ApiService.Isetan.upload(request)
                 .flatMap {
-                    logd("Upload successfully")
                     val imageUrl = it.message.imageUrl
                     val newRequestEmail = request2.copy(imageUrl = imageUrl)
                     ApiService.Isetan.sendEmail(newRequestEmail)
