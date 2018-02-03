@@ -11,8 +11,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.bumptech.glide.Glide
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_merge.*
 import kotlinx.android.synthetic.main.layout_toolbar.*
 import kotlinx.coroutines.experimental.android.UI
@@ -22,8 +20,7 @@ import me.ripzery.bitmapmerger.BitmapMerger
 import me.ripzery.mergy.R
 import me.ripzery.mergy.ScalableLayout
 import me.ripzery.mergy.extensions.toast
-import me.ripzery.mergy.network.ApiService
-import me.ripzery.mergy.network.Response
+import me.ripzery.mergy.network.DataProvider
 import org.jetbrains.anko.coroutines.experimental.bg
 
 
@@ -56,33 +53,13 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, Backgr
         scalableLayout.setImage(mSticker)
 
         /* Initialize gallery layout */
-//        val listBackgroundData = arrayListOf<BackgroundData>(
-//                BackgroundData(R.drawable.bg, "Background 1"),
-//                BackgroundData(R.drawable.bg2, "Background 2"),
-//                BackgroundData(R.drawable.bg3, "Background 3"),
-//                BackgroundData(R.drawable.bg4, "Background 4"),
-//                BackgroundData(R.drawable.bg5, "Background 5"),
-//                BackgroundData(R.drawable.bg6, "Background 6")
-//        )
-
-        ApiService.Isetan.retrievePhotos()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    mGalleryFragment = GalleryFragment.newInstance(it.message)
-                    supportFragmentManager
-                            .beginTransaction()
-                            .replace(R.id.galleryContainer, mGalleryFragment)
-                            .commit()
-                }
-    }
-
-    private fun updateBackgroundImages(config: Response.Config) {
-        mGalleryFragment = GalleryFragment.newInstance(config.message)
-        supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.galleryContainer, mGalleryFragment)
-                .commit()
+        DataProvider.retrievesPhotos {
+            mGalleryFragment = GalleryFragment.newInstance(it)
+            supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.galleryContainer, mGalleryFragment)
+                    .commit()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -92,16 +69,12 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, Backgr
         return true
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             android.R.id.home -> finish()
             R.id.menu_save -> {
-                mMenuSave?.isVisible = false
-                mMenuCancel?.isVisible = true
-                mMenuCancel?.isEnabled = false
-                scalableLayout.visibility = View.GONE
-                progressBar.visibility = View.VISIBLE
+                showSave()
+                showSaveLoading()
                 setPhotoAlpha(0.7f)
                 async(UI) {
                     val bgTask = bg {
@@ -112,18 +85,37 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, Backgr
                     changeBackground(bgTask.await())
                     setPhotoAlpha(1.0f)
                     toast("Saved image successfully.")
-                    progressBar?.visibility = View.GONE
-                    mMenuCancel?.isEnabled = true
+                    showSave()
                 }
             }
             R.id.menu_cancel -> {
+                showCancel()
                 scalableLayout.visibility = View.VISIBLE
                 changeBackground(mBitmapBG)
-                mMenuSave?.isVisible = true
-                mMenuCancel?.isVisible = false
             }
         }
         return true
+    }
+
+    private fun showSaveLoading() {
+        scalableLayout.visibility = View.GONE
+        progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideSaveLoading() {
+        progressBar?.visibility = View.GONE
+        mMenuCancel?.isEnabled = true
+    }
+
+    private fun showSave() {
+        mMenuSave?.isVisible = false
+        mMenuCancel?.isVisible = true
+        mMenuCancel?.isEnabled = false
+    }
+
+    private fun showCancel() {
+        mMenuSave?.isVisible = true
+        mMenuCancel?.isVisible = false
     }
 
     private fun changeBackground(bitmap: Bitmap) {
@@ -148,7 +140,6 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, Backgr
 
     /* Override interface */
     override fun getContainer(): View = container
-
     override fun getImageDrawable(): Drawable = ivPhoto.drawable
     override fun getStickerLayout(): ScalableLayout = scalableLayout
 

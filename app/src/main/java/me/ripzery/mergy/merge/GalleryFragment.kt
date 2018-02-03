@@ -73,7 +73,6 @@ class GalleryFragment : Fragment() {
         }
     }
 
-
     companion object {
         private val LIST_BACKGROUND_DATA = "param1"
         fun newInstance(listBackgroundData: ArrayList<Response.Photo>): GalleryFragment {

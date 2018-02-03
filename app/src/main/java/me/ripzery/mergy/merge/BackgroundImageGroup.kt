@@ -12,6 +12,7 @@ import com.bumptech.glide.request.transition.Transition
 import kotlinx.android.synthetic.main.layout_background_image.view.*
 import me.ripzery.mergy.R
 import me.ripzery.mergy.extensions.logd
+import me.ripzery.mergy.helpers.GlideHelpers
 
 
 /**
@@ -47,15 +48,16 @@ class BackgroundImageGroup constructor(
         mRootLayout.tvCaption.text = caption
     }
 
-    @SuppressLint("CheckResult")
     fun setImageBackground(bg: String) {
         val width = resources.getDimension(R.dimen.backgroundWidth)
         val height = resources.getDimension(R.dimen.backgroundHeight)
         Glide.with(context)
+                .applyDefaultRequestOptions(GlideHelpers.defaultRequestOptions())
                 .asBitmap()
                 .load(bg)
                 .into(object : SimpleTarget<Bitmap>(width.toInt(), height.toInt()) {
                     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                        progressBar.visibility = View.GONE
                         mBackground = resource
                         mRootLayout.ivBackground.setImageBitmap(resource)
                     }
