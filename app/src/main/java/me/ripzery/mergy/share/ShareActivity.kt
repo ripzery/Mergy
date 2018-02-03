@@ -18,10 +18,10 @@ import java.util.*
 
 class ShareActivity : AppCompatActivity() {
 
-    lateinit var mCurrentPhoto: Response.Photo
-    lateinit var mImageUri: Uri
-    lateinit var mUsers: ArrayList<Response.User>
-    var mSelectedUser: Response.User? = null
+    private lateinit var mCurrentPhoto: Response.Photo
+    private lateinit var mImageUri: Uri
+    private lateinit var mUsers: ArrayList<Response.User>
+    private var mSelectedUser: Response.User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
