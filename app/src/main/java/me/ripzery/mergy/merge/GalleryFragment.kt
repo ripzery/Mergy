@@ -1,7 +1,6 @@
 package me.ripzery.mergy.merge
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -12,17 +11,18 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_gallery.*
 import kotlinx.android.synthetic.main.viewgroup_layout_background.view.*
 import me.ripzery.mergy.R
-import me.ripzery.mergy.models.BackgroundData
+import me.ripzery.mergy.extensions.logd
+import me.ripzery.mergy.network.Response
 
 class GalleryFragment : Fragment() {
-    private lateinit var mBackgroundDataList: ArrayList<BackgroundData>
+    private lateinit var mBackgroundDataList: ArrayList<Response.Photo>
     private var mListener: BackgroundImageGroup.OnImageSelectedListener? = null
     private lateinit var mAdapter: GalleryRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
-            mBackgroundDataList = arguments!!.getParcelableArrayList<BackgroundData>(LIST_BACKGROUND_DATA)
+            mBackgroundDataList = arguments!!.getParcelableArrayList<Response.Photo>(LIST_BACKGROUND_DATA)
         }
     }
 
@@ -51,7 +51,7 @@ class GalleryFragment : Fragment() {
         mListener = null
     }
 
-    inner class GalleryRecyclerAdapter(private val mBitmapList: ArrayList<BackgroundData>, val onBackgroundSelectListener: BackgroundImageGroup.OnImageSelectedListener?) : RecyclerView.Adapter<GalleryRecyclerAdapter.GalleryViewHolder>() {
+    inner class GalleryRecyclerAdapter(private val mBitmapList: ArrayList<Response.Photo>, val onBackgroundSelectListener: BackgroundImageGroup.OnImageSelectedListener?) : RecyclerView.Adapter<GalleryRecyclerAdapter.GalleryViewHolder>() {
         override fun onBindViewHolder(holder: GalleryViewHolder?, position: Int) {
             holder?.setData(mBitmapList[position])
         }
@@ -63,11 +63,10 @@ class GalleryFragment : Fragment() {
 
         override fun getItemCount() = mBitmapList.size
         inner class GalleryViewHolder(private val rootView: View) : RecyclerView.ViewHolder(rootView) {
-            fun setData(backgroundData: BackgroundData) {
+            fun setData(backgroundData: Response.Photo) {
                 with(rootView.backgroundImageGroup) {
-                    val bg = BitmapFactory.decodeResource(context.resources, backgroundData.bitmap)
-                    setImageBackground(bg)
-                    setCaption(backgroundData.caption)
+                    logd(backgroundData.toString())
+                    setImageBackground(backgroundData.imageUrl)
                     setOnBackgroundChangeListener(onBackgroundSelectListener)
                 }
             }
@@ -77,7 +76,7 @@ class GalleryFragment : Fragment() {
 
     companion object {
         private val LIST_BACKGROUND_DATA = "param1"
-        fun newInstance(listBackgroundData: ArrayList<BackgroundData>): GalleryFragment {
+        fun newInstance(listBackgroundData: ArrayList<Response.Photo>): GalleryFragment {
             val fragment = GalleryFragment()
             val args = Bundle()
             args.putParcelableArrayList(LIST_BACKGROUND_DATA, listBackgroundData)

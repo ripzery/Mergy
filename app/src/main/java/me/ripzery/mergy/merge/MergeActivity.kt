@@ -11,6 +11,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.bumptech.glide.Glide
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_merge.*
 import kotlinx.android.synthetic.main.layout_toolbar.*
 import kotlinx.coroutines.experimental.android.UI
@@ -20,7 +22,8 @@ import me.ripzery.bitmapmerger.BitmapMerger
 import me.ripzery.mergy.R
 import me.ripzery.mergy.ScalableLayout
 import me.ripzery.mergy.extensions.toast
-import me.ripzery.mergy.models.BackgroundData
+import me.ripzery.mergy.network.ApiService
+import me.ripzery.mergy.network.Response
 import org.jetbrains.anko.coroutines.experimental.bg
 
 
@@ -53,15 +56,29 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, Backgr
         scalableLayout.setImage(mSticker)
 
         /* Initialize gallery layout */
-        val listBackgroundData = arrayListOf<BackgroundData>(
-                BackgroundData(R.drawable.bg, "Background 1"),
-                BackgroundData(R.drawable.bg2, "Background 2"),
-                BackgroundData(R.drawable.bg3, "Background 3"),
-                BackgroundData(R.drawable.bg4, "Background 4"),
-                BackgroundData(R.drawable.bg5, "Background 5"),
-                BackgroundData(R.drawable.bg6, "Background 6")
-        )
-        mGalleryFragment = GalleryFragment.newInstance(listBackgroundData)
+//        val listBackgroundData = arrayListOf<BackgroundData>(
+//                BackgroundData(R.drawable.bg, "Background 1"),
+//                BackgroundData(R.drawable.bg2, "Background 2"),
+//                BackgroundData(R.drawable.bg3, "Background 3"),
+//                BackgroundData(R.drawable.bg4, "Background 4"),
+//                BackgroundData(R.drawable.bg5, "Background 5"),
+//                BackgroundData(R.drawable.bg6, "Background 6")
+//        )
+
+        ApiService.Isetan.retrievePhotos()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    mGalleryFragment = GalleryFragment.newInstance(it.message)
+                    supportFragmentManager
+                            .beginTransaction()
+                            .replace(R.id.galleryContainer, mGalleryFragment)
+                            .commit()
+                }
+    }
+
+    private fun updateBackgroundImages(config: Response.Config) {
+        mGalleryFragment = GalleryFragment.newInstance(config.message)
         supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.galleryContainer, mGalleryFragment)

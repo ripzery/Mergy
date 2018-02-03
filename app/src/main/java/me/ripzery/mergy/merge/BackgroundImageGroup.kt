@@ -1,13 +1,17 @@
 package me.ripzery.mergy.merge
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import kotlinx.android.synthetic.main.layout_background_image.view.*
 import me.ripzery.mergy.R
+import me.ripzery.mergy.extensions.logd
 
 
 /**
@@ -21,7 +25,7 @@ class BackgroundImageGroup constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
     private lateinit var mRootLayout: FrameLayout
-    private lateinit var mBackground: Bitmap
+    private var mBackground: Bitmap? = null
     private var mOnBackgroudSelectListener: OnImageSelectedListener? = null
 
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0) {
@@ -31,7 +35,11 @@ class BackgroundImageGroup constructor(
     private fun init() {
         mRootLayout = View.inflate(context, R.layout.layout_background_image, this) as FrameLayout
         mRootLayout.backgroundLayout.setOnClickListener {
-            mOnBackgroudSelectListener?.onBackgroundSelected(getImageBackground())
+            if (mBackground != null) {
+                mOnBackgroudSelectListener?.onBackgroundSelected(mBackground!!)
+            } else {
+                logd("Background is null")
+            }
         }
     }
 
@@ -39,15 +47,19 @@ class BackgroundImageGroup constructor(
         mRootLayout.tvCaption.text = caption
     }
 
-    fun setImageBackground(bg: Bitmap) {
-        mBackground = bg
+    @SuppressLint("CheckResult")
+    fun setImageBackground(bg: String) {
+        val width = resources.getDimension(R.dimen.backgroundWidth)
+        val height = resources.getDimension(R.dimen.backgroundHeight)
         Glide.with(context)
+                .asBitmap()
                 .load(bg)
-                .into(mRootLayout.ivBackground)
-    }
-
-    fun getImageBackground(): Bitmap {
-        return mBackground
+                .into(object : SimpleTarget<Bitmap>(width.toInt(), height.toInt()) {
+                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                        mBackground = resource
+                        mRootLayout.ivBackground.setImageBitmap(resource)
+                    }
+                })
     }
 
     fun setOnBackgroundChangeListener(listener: OnImageSelectedListener?) {
