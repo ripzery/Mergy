@@ -66,7 +66,7 @@ class GalleryFragment : Fragment() {
             fun setData(backgroundData: Response.Photo) {
                 with(rootView.backgroundImageGroup) {
                     logd(backgroundData.toString())
-                    setImageBackground(backgroundData.imageUrl)
+                    setImageBackground(backgroundData)
                     setOnBackgroundChangeListener(onBackgroundSelectListener)
                 }
             }

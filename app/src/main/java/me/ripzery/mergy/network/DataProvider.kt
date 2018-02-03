@@ -1,6 +1,7 @@
 package me.ripzery.mergy.network
 
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import me.ripzery.mergy.extensions.logd
 
@@ -13,7 +14,6 @@ import me.ripzery.mergy.extensions.logd
  */
 
 object DataProvider {
-
     // Define each error handler here.
     object ErrorHandlerStrategy {
         val mLogErrorHandler: (Throwable) -> Unit = {
@@ -35,12 +35,58 @@ object DataProvider {
         }
     }
 
+    private val mDisposable: CompositeDisposable by lazy { CompositeDisposable() }
+
     fun retrievesPhotos(callback: (ArrayList<Response.Photo>) -> Unit) {
-        ApiService.Isetan.retrievePhotos()
+        val d = ApiService.Isetan.retrievePhotos()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     callback(it.message)
                 }, mErrorHandler)
+        mDisposable.add(d)
+    }
+
+    fun sendEmail(request: Request.SendEmail, callback: (Response.SendEmail) -> Unit) {
+        val d = ApiService.Isetan.sendEmail(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    callback(it)
+                }, mErrorHandler)
+
+        mDisposable.add(d)
+    }
+
+    fun upload(request: Request.Upload, callback: (Response.Upload) -> Unit) {
+        val d = ApiService.Isetan.upload(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    callback(it)
+                }, mErrorHandler)
+
+        mDisposable.add(d)
+    }
+
+    fun uploadThenSendEmail(request: Request.Upload, request2: Request.SendEmail, callback: (Response.SendEmail) -> Unit) {
+        val d = ApiService.Isetan.upload(request)
+                .flatMap {
+                    logd("Upload successfully")
+                    val imageUrl = it.message.imageUrl
+                    val newRequestEmail = request2.copy(imageUrl = imageUrl)
+                    ApiService.Isetan.sendEmail(newRequestEmail)
+                }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    callback(it)
+                }, mErrorHandler)
+
+        mDisposable.add(d)
+    }
+
+    fun unsubscribe() {
+        mDisposable.clear()
     }
 }

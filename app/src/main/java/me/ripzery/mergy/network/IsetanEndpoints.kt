@@ -1,6 +1,8 @@
 package me.ripzery.mergy.network
 
 import io.reactivex.Observable
+import retrofit2.http.Body
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 
@@ -16,11 +18,11 @@ interface IsetanEndpoints {
     fun retrievePhotos(): Observable<Response.Config>
 
     @POST("api/upload/media")
-    fun upload(request: Request.Upload): Observable<Response.Upload>
+    fun upload(@Body request: Request.Upload): Observable<Response.Upload>
 
     @POST("api/user/getrecord")
-    fun retrieveUserInfos(request: Request.RetrieveUsers): Observable<Response.RetrieveUsers>
+    fun retrieveUserInfos(@Body request: Request.RetrieveUsers): Observable<Response.RetrieveUsers>
 
     @POST("api/user/sendmail")
-    fun sendEmail(request: Request.SendEmail): Observable<Response.SendEmail>
+    fun sendEmail(@Body request: Request.SendEmail): Observable<Response.SendEmail>
 }

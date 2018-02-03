@@ -1,6 +1,5 @@
 package me.ripzery.mergy.merge
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.AttributeSet
@@ -13,6 +12,7 @@ import kotlinx.android.synthetic.main.layout_background_image.view.*
 import me.ripzery.mergy.R
 import me.ripzery.mergy.extensions.logd
 import me.ripzery.mergy.helpers.GlideHelpers
+import me.ripzery.mergy.network.Response
 
 
 /**
@@ -27,6 +27,7 @@ class BackgroundImageGroup constructor(
 ) : FrameLayout(context, attrs, defStyleAttr) {
     private lateinit var mRootLayout: FrameLayout
     private var mBackground: Bitmap? = null
+    private var mPhoto: Response.Photo? = null
     private var mOnBackgroudSelectListener: OnImageSelectedListener? = null
 
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0) {
@@ -36,8 +37,8 @@ class BackgroundImageGroup constructor(
     private fun init() {
         mRootLayout = View.inflate(context, R.layout.layout_background_image, this) as FrameLayout
         mRootLayout.backgroundLayout.setOnClickListener {
-            if (mBackground != null) {
-                mOnBackgroudSelectListener?.onBackgroundSelected(mBackground!!)
+            if (mPhoto != null && mBackground != null) {
+                mOnBackgroudSelectListener?.onBackgroundSelected(mBackground!!, mPhoto!!)
             } else {
                 logd("Background is null")
             }
@@ -48,13 +49,14 @@ class BackgroundImageGroup constructor(
         mRootLayout.tvCaption.text = caption
     }
 
-    fun setImageBackground(bg: String) {
+    fun setImageBackground(photo: Response.Photo) {
+        mPhoto = photo
         val width = resources.getDimension(R.dimen.backgroundWidth)
         val height = resources.getDimension(R.dimen.backgroundHeight)
         Glide.with(context)
                 .applyDefaultRequestOptions(GlideHelpers.defaultRequestOptions())
                 .asBitmap()
-                .load(bg)
+                .load(photo.imageUrl)
                 .into(object : SimpleTarget<Bitmap>(width.toInt(), height.toInt()) {
                     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                         progressBar.visibility = View.GONE
@@ -69,6 +71,6 @@ class BackgroundImageGroup constructor(
     }
 
     interface OnImageSelectedListener {
-        fun onBackgroundSelected(bg: Bitmap)
+        fun onBackgroundSelected(bg: Bitmap, photo: Response.Photo)
     }
 }

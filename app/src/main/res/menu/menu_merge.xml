@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/menu_share"
+        android:title="@string/share"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/menu_save"
         android:title="Save"
         app:showAsAction="always" />
