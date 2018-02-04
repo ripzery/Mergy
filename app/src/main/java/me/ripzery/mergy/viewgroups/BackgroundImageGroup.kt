@@ -2,6 +2,8 @@ package me.ripzery.mergy.viewgroups
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
@@ -13,6 +15,7 @@ import me.ripzery.mergy.R
 import me.ripzery.mergy.extensions.logd
 import me.ripzery.mergy.helpers.GlideHelpers
 import me.ripzery.mergy.network.Response
+import me.ripzery.mergy.ui.merge.gallery.GalleryViewModel
 
 
 /**
@@ -28,7 +31,7 @@ class BackgroundImageGroup constructor(
     private lateinit var mRootLayout: FrameLayout
     private var mBackground: Bitmap? = null
     private var mPhoto: Response.Photo? = null
-    private var mOnBackgroudSelectListener: OnImageSelectedListener? = null
+    private var mGalleryViewModel: GalleryViewModel? = null
 
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0) {
         init()
@@ -38,7 +41,7 @@ class BackgroundImageGroup constructor(
         mRootLayout = View.inflate(context, R.layout.layout_background_image, this) as FrameLayout
         mRootLayout.backgroundLayout.setOnClickListener {
             if (mPhoto != null && mBackground != null) {
-                mOnBackgroudSelectListener?.onBackgroundSelected(mBackground!!, mPhoto!!)
+                mGalleryViewModel?.select(mBackground!!, mPhoto!!)
             } else {
                 logd("Background is null")
             }
@@ -63,11 +66,18 @@ class BackgroundImageGroup constructor(
                         mBackground = resource
                         mRootLayout.ivBackground.setImageBitmap(resource)
                     }
+
+                    override fun onLoadFailed(errorDrawable: Drawable?) {
+                        mRootLayout.ivBackground.setImageDrawable(errorDrawable)
+                        progressBar.visibility = View.GONE
+                        mBackground = (errorDrawable!! as BitmapDrawable).bitmap
+                    }
                 })
     }
 
-    fun setOnBackgroundChangeListener(listener: OnImageSelectedListener?) {
-        mOnBackgroudSelectListener = listener
+
+    fun setGalleryViewModel(listener: GalleryViewModel) {
+        mGalleryViewModel = listener
     }
 
     interface OnImageSelectedListener {

@@ -1,6 +1,7 @@
 package me.ripzery.mergy.ui.merge.gallery
 
-import android.content.Context
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -13,19 +14,10 @@ import kotlinx.android.synthetic.main.viewgroup_layout_background.view.*
 import me.ripzery.mergy.R
 import me.ripzery.mergy.extensions.logd
 import me.ripzery.mergy.network.Response
-import me.ripzery.mergy.viewgroups.BackgroundImageGroup
 
 class GalleryFragment : Fragment() {
-    private lateinit var mBackgroundDataList: ArrayList<Response.Photo>
-    private var mListener: BackgroundImageGroup.OnImageSelectedListener? = null
+    private val mGalleryViewModel: GalleryViewModel by lazy { ViewModelProviders.of(activity!!).get(GalleryViewModel::class.java) }
     private lateinit var mAdapter: GalleryRecyclerAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (arguments != null) {
-            mBackgroundDataList = arguments!!.getParcelableArrayList<Response.Photo>(LIST_BACKGROUND_DATA)
-        }
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -33,26 +25,17 @@ class GalleryFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        mAdapter = GalleryRecyclerAdapter(mBackgroundDataList, mListener)
+        mAdapter = GalleryRecyclerAdapter(arrayListOf())
         recyclerView.adapter = mAdapter
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        mGalleryViewModel.retrieveGallery().observe(this, Observer { photoList ->
+            if (photoList != null) {
+                mAdapter.addPhotos(photoList)
+            }
+        })
     }
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        if (context is BackgroundImageGroup.OnImageSelectedListener) {
-            mListener = context
-        } else {
-            throw RuntimeException(context!!.toString() + " must implement me.ripzery.mergy.ui.merge.gallery.GalleryFragment.OnImageSelectedListener")
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        mListener = null
-    }
-
-    inner class GalleryRecyclerAdapter(private val mBitmapList: ArrayList<Response.Photo>, val onBackgroundSelectListener: BackgroundImageGroup.OnImageSelectedListener?) : RecyclerView.Adapter<GalleryRecyclerAdapter.GalleryViewHolder>() {
+    inner class GalleryRecyclerAdapter(private val mBitmapList: ArrayList<Response.Photo>) : RecyclerView.Adapter<GalleryRecyclerAdapter.GalleryViewHolder>() {
         override fun onBindViewHolder(holder: GalleryViewHolder?, position: Int) {
             holder?.setData(mBitmapList[position])
         }
@@ -63,23 +46,27 @@ class GalleryFragment : Fragment() {
         }
 
         override fun getItemCount() = mBitmapList.size
+
+        fun addPhotos(photoList: ArrayList<Response.Photo>) {
+            mBitmapList.addAll(photoList)
+            notifyItemRangeInserted(0, photoList.size)
+        }
+
         inner class GalleryViewHolder(private val rootView: View) : RecyclerView.ViewHolder(rootView) {
             fun setData(backgroundData: Response.Photo) {
                 with(rootView.backgroundImageGroup) {
                     logd(backgroundData.toString())
                     setImageBackground(backgroundData)
-                    setOnBackgroundChangeListener(onBackgroundSelectListener)
+                    setGalleryViewModel(mGalleryViewModel)
                 }
             }
         }
     }
 
     companion object {
-        private val LIST_BACKGROUND_DATA = "param1"
-        fun newInstance(listBackgroundData: ArrayList<Response.Photo>): GalleryFragment {
+        fun newInstance(): GalleryFragment {
             val fragment = GalleryFragment()
             val args = Bundle()
-            args.putParcelableArrayList(LIST_BACKGROUND_DATA, listBackgroundData)
             fragment.arguments = args
             return fragment
         }

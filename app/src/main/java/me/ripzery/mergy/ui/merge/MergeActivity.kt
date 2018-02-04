@@ -1,5 +1,7 @@
 package me.ripzery.mergy.ui.merge
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -14,30 +16,27 @@ import android.view.View
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_merge.*
 import kotlinx.android.synthetic.main.layout_toolbar.*
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
 import me.ripzery.bitmapkeeper.BitmapKeeper
 import me.ripzery.bitmapmerger.BitmapMerger
 import me.ripzery.mergy.R
-import me.ripzery.mergy.viewgroups.ScalableLayout
-import me.ripzery.mergy.extensions.logd
 import me.ripzery.mergy.extensions.toast
 import me.ripzery.mergy.helpers.PositionManager
 import me.ripzery.mergy.helpers.PositionManagerInterface
-import me.ripzery.mergy.network.DataProvider
 import me.ripzery.mergy.network.Response
 import me.ripzery.mergy.ui.merge.gallery.GalleryFragment
+import me.ripzery.mergy.ui.merge.gallery.GalleryViewModel
 import me.ripzery.mergy.ui.share.ShareActivity
-import me.ripzery.mergy.viewgroups.BackgroundImageGroup
-import org.jetbrains.anko.coroutines.experimental.bg
+import me.ripzery.mergy.viewgroups.ScalableLayout
 
 
-class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, BackgroundImageGroup.OnImageSelectedListener {
+class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeContract.View {
     private val mPosition
         get() = PositionManager(this).getPosition()
     private val mSticker by lazy {
         MediaStore.Images.Media.getBitmap(this.contentResolver, intent.data)
     }
+    private val mGalleryViewModel: GalleryViewModel by lazy { ViewModelProviders.of(this).get(GalleryViewModel::class.java) }
+    private val mMergePresenter: MergeContract.Presenter by lazy { MergePresenter(this) }
     private var mCurrentMergedImage: Uri? = null
     private var mMenuShare: MenuItem? = null
     private var mMenuSave: MenuItem? = null
@@ -52,12 +51,6 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, Backgr
         initInstance()
     }
 
-    override fun onStop() {
-        DataProvider.unsubscribe()
-        super.onStop()
-    }
-
-
     private fun initInstance() {
         setSupportActionBar(toolbar)
         supportActionBar?.title = "Merge Image"
@@ -65,17 +58,27 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, Backgr
 
         /* Initialize background and sticker images */
         mBitmapBG = BitmapFactory.decodeResource(resources, R.drawable.bg)
-        changeBackground(mBitmapBG)
+        setBackground(mBitmapBG)
         scalableLayout.setImage(mSticker)
 
         /* Initialize gallery layout */
-        DataProvider.retrievesPhotos {
-            mGalleryFragment = GalleryFragment.newInstance(it)
-            supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.galleryContainer, mGalleryFragment)
-                    .commit()
-        }
+        mGalleryFragment = GalleryFragment.newInstance()
+        supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.galleryContainer, mGalleryFragment)
+                .commit()
+
+        observeBackgroundChanged()
+    }
+
+    private fun observeBackgroundChanged() {
+        mGalleryViewModel.subscribeBitmap().observe(this, Observer {
+            mMergePresenter.handleBackgroundChanged(it!!)
+        })
+
+        mGalleryViewModel.subscribePhoto().observe(this, Observer {
+            mCurrentPhoto = it
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -89,97 +92,89 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, Backgr
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             android.R.id.home -> finish()
-            R.id.menu_save -> {
-                showCancel()
-                showSaveLoading()
-                mMenuCancel?.isEnabled = false
-                setPhotoAlpha(0.7f)
-                async(UI) {
-                    val bgTask = bg {
-                        val newBitmap = merge(mBitmapBG, mSticker)
-                        mCurrentMergedImage = saveToDevice(newBitmap)
-                        newBitmap
-                    }
-                    changeBackground(bgTask.await())
-                    mMenuCancel?.isEnabled = true
-                    mMenuShare?.isVisible = true
-                    showCancel()
-                    hideSaveLoading()
-                    setPhotoAlpha(1.0f)
-                    toast("Saved image successfully.")
-                }
-            }
-            R.id.menu_cancel -> {
-                showSave()
-                scalableLayout.visibility = View.VISIBLE
-                changeBackground(mBitmapBG)
-                mMenuShare?.isVisible = false
-            }
+            R.id.menu_save -> mMergePresenter.handleSaveClicked(mBitmapBG, mSticker)
+            R.id.menu_cancel -> mMergePresenter.handleCancelClicked(mBitmapBG)
             R.id.menu_share -> {
                 if (mCurrentMergedImage != null) {
-                    val intent = Intent(this, ShareActivity::class.java)
-                    intent.putExtra("result", mCurrentMergedImage!!.toString())
-                    intent.putExtra("photo", mCurrentPhoto)
-                    startActivity(intent)
+                    startShareActivity()
                 } else {
-                    logd("The user hasn't merge an image yet.")
+                    toast("Please merge image first.")
                 }
             }
         }
         return true
     }
 
-    private fun showSaveLoading() {
-        scalableLayout.visibility = View.GONE
-        progressBar.visibility = View.VISIBLE
+    private fun startShareActivity() {
+        val intent = Intent(this, ShareActivity::class.java)
+        intent.putExtra("result", mCurrentMergedImage!!.toString())
+        intent.putExtra("photo", mCurrentPhoto)
+        startActivity(intent)
     }
 
-    private fun hideSaveLoading() {
-        progressBar?.visibility = View.GONE
+    override fun setBitmap(bitmap: Bitmap) {
+        mBitmapBG = bitmap
     }
 
-    private fun showCancel() {
-        mMenuSave?.isVisible = false
-        mMenuCancel?.isVisible = true
-    }
-
-    private fun showSave() {
-        mMenuSave?.isVisible = true
-        mMenuCancel?.isVisible = false
-    }
-
-    private fun changeBackground(bitmap: Bitmap) {
+    override fun setBackground(bitmap: Bitmap) {
         Glide.with(this).load(bitmap).into(ivPhoto)
     }
 
-    private fun setPhotoAlpha(alpha: Float) {
+    override fun setPhotoAlpha(alpha: Float) {
         ivPhoto.alpha = alpha
     }
 
-    private fun merge(background: Bitmap, sticker: Bitmap): Bitmap {
-        val bitmapMerger = BitmapMerger(background, sticker)
-        val newBitmap = bitmapMerger.merge(this@MergeActivity, mPosition)
-        return newBitmap
+    override fun merge(background: Bitmap, sticker: Bitmap): Bitmap {
+        return BitmapMerger(background, sticker).merge(this@MergeActivity, mPosition)
     }
 
-    private fun saveToDevice(bitmap: Bitmap): Uri {
-        val bitmapKeeper = BitmapKeeper(bitmap)
-        val savedImageUri = bitmapKeeper.save(this)
-        return savedImageUri
+    override fun saveToDevice(bitmap: Bitmap): Uri {
+        return BitmapKeeper(bitmap).save(this)
     }
 
-    /* Override interface */
+    override fun setSaveVisibility(visible: Boolean) {
+        mMenuSave?.isVisible = visible
+    }
+
+    override fun setCancelVisibility(visible: Boolean) {
+        mMenuCancel?.isVisible = visible
+    }
+
+    override fun setShareVisibility(visible: Boolean) {
+        mMenuShare?.isVisible = visible
+    }
+
+    override fun setLoadingVisibility(visible: Boolean) {
+        progressBar?.visibility = if (visible) View.VISIBLE else View.GONE
+    }
+
+    override fun setScalableViewVisibility(visible: Boolean) {
+        scalableLayout?.visibility = if (visible) View.VISIBLE else View.GONE
+    }
+
+    override fun setSaveEnabled(enable: Boolean) {
+        mMenuSave?.isEnabled = enable
+    }
+
+    override fun setCancelEnabled(enable: Boolean) {
+        mMenuCancel?.isEnabled = enable
+    }
+
+    override fun setShareEnabled(enable: Boolean) {
+        mMenuShare?.isEnabled = enable
+    }
+
+    override fun setMergedImageUri(uri: Uri) {
+        mCurrentMergedImage = uri
+    }
+
+    override fun showSaveImageSuccess() {
+        toast("Saved image successfully.")
+    }
+
     override fun getContainer(): View = container
 
     override fun getImageDrawable(): Drawable = ivPhoto.drawable
-    override fun getStickerLayout(): ScalableLayout = scalableLayout
 
-    override fun onBackgroundSelected(bg: Bitmap, photo: Response.Photo) {
-        mBitmapBG = bg
-        mCurrentPhoto = photo
-        changeBackground(bg)
-        scalableLayout.visibility = View.VISIBLE
-        mMenuSave?.isVisible = true
-        mMenuCancel?.isVisible = false
-    }
+    override fun getStickerLayout(): ScalableLayout = scalableLayout
 }
