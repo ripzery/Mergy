@@ -18,6 +18,7 @@ interface ShareContract {
         fun encryptBase64(callback: (String) -> Unit)
         fun showLoading()
         fun hideLoading()
+        fun changeBtnName(name: String)
     }
 
     interface Presenter {

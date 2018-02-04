@@ -19,7 +19,7 @@ class SharePresenter(private val mView: ShareContract.View) : ShareContract.Pres
         val reqSendEmail = Request.SendEmail(
                 mockEmail,
                 user.userProfileId,
-                "",
+                user.email,
                 user.firstName,
                 user.lastName,
                 photo.seasonId,

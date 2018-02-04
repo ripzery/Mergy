@@ -1,5 +1,6 @@
 package me.ripzery.mergy.ui.share
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -23,7 +24,6 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
     private lateinit var mUsers: ArrayList<Response.User>
     private val mSharePresenter: ShareContract.Presenter by lazy { SharePresenter(this) }
     private var mSelectedUser: Response.User? = null
-    private val mockEmail = "ripzery@gmail.com"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,10 +64,12 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
             mUsers = it.message
             spinUsers.setItems(it.message.map { it.email })
             mSelectedUser = mUsers[0]
+            changeBtnName(mSelectedUser!!.email)
         }
 
         spinUsers.setOnItemSelectedListener { view, position, id, item ->
             mSelectedUser = mUsers[position]
+            changeBtnName(mSelectedUser!!.email)
         }
 
     }
@@ -84,7 +86,7 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
 
     override fun updateThenSendEmail(reqUpload: Request.Upload, reqSendEmail: Request.SendEmail, onSuccess: (Response.SendEmail) -> Unit) {
         DataProvider.uploadThenSendEmail(reqUpload, reqSendEmail) {
-            toast("The image is sent to $mockEmail successfully.")
+            toast("The image is sent to ${reqSendEmail.email} successfully.")
             onSuccess(it)
         }
     }
@@ -109,6 +111,11 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
         spinUsers.isEnabled = true
         ivShare.isEnabled = false
         progressBar.visibility = View.GONE
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun changeBtnName(name: String) {
+        btnShare.text = "Send to $name"
     }
 
     override fun onStop() {
