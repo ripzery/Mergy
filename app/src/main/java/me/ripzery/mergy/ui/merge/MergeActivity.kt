@@ -26,6 +26,7 @@ import me.ripzery.mergy.helpers.PositionManager
 import me.ripzery.mergy.helpers.PositionManagerInterface
 import me.ripzery.mergy.network.DataProvider
 import me.ripzery.mergy.network.Response
+import me.ripzery.mergy.ui.merge.gallery.GalleryFragment
 import me.ripzery.mergy.ui.share.ShareActivity
 import me.ripzery.mergy.viewgroups.BackgroundImageGroup
 import org.jetbrains.anko.coroutines.experimental.bg

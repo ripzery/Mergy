@@ -1,4 +1,4 @@
-package me.ripzery.mergy.ui.merge
+package me.ripzery.mergy.ui.merge.gallery
 
 import android.content.Context
 import android.os.Bundle
@@ -43,7 +43,7 @@ class GalleryFragment : Fragment() {
         if (context is BackgroundImageGroup.OnImageSelectedListener) {
             mListener = context
         } else {
-            throw RuntimeException(context!!.toString() + " must implement me.ripzery.mergy.ui.merge.GalleryFragment.OnImageSelectedListener")
+            throw RuntimeException(context!!.toString() + " must implement me.ripzery.mergy.ui.merge.gallery.GalleryFragment.OnImageSelectedListener")
         }
     }
 
