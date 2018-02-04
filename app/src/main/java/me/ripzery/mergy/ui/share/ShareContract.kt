@@ -19,9 +19,11 @@ interface ShareContract {
         fun showLoading()
         fun hideLoading()
         fun changeBtnName(name: String)
+        fun showUsers(users: ArrayList<Response.User>)
     }
 
     interface Presenter {
         fun handleShare(user: Response.User, photo: Response.Photo, img: Uri)
+        fun fetchUsers()
     }
 }

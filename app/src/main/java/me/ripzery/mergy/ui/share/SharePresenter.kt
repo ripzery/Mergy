@@ -1,8 +1,11 @@
 package me.ripzery.mergy.ui.share
 
 import android.net.Uri
+import me.ripzery.mergy.network.DataProvider
 import me.ripzery.mergy.network.Request
 import me.ripzery.mergy.network.Response
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 /**
@@ -32,4 +35,13 @@ class SharePresenter(private val mView: ShareContract.View) : ShareContract.Pres
         }
     }
 
+    override fun fetchUsers() {
+        val date = Date()
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+        val request = Request.RetrieveUsers("2018-01-29")
+
+        DataProvider.retrieveUsers(request) {
+            mView.showUsers(it.message)
+        }
+    }
 }

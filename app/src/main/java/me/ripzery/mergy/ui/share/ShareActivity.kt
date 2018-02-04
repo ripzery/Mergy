@@ -15,7 +15,6 @@ import me.ripzery.mergy.helpers.Base64Helper
 import me.ripzery.mergy.network.DataProvider
 import me.ripzery.mergy.network.Request
 import me.ripzery.mergy.network.Response
-import java.text.SimpleDateFormat
 import java.util.*
 
 class ShareActivity : AppCompatActivity(), ShareContract.View {
@@ -44,7 +43,15 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
         setSupportActionBar(toolbar)
         supportActionBar?.title = "Share"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        fetchUsers()
+        mSharePresenter.fetchUsers()
+
+        spinUsers.setOnItemSelectedListener { view, position, id, item ->
+            if (mUsers.size > 0) {
+                mSelectedUser = mUsers[position]
+                changeBtnName(mSelectedUser!!.email)
+            }
+        }
+
         previewImage()
         setupShareBtn()
     }
@@ -55,23 +62,11 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
                 .into(ivShare)
     }
 
-    private fun fetchUsers() {
-        val date = Date()
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
-//        val request = Request.RetrieveUsers(dateFormat.format(date))
-        val request = Request.RetrieveUsers("2018-01-29")
-        DataProvider.retrieveUsers(request) {
-            mUsers = it.message
-            spinUsers.setItems(it.message.map { it.email })
-            mSelectedUser = mUsers[0]
-            changeBtnName(mSelectedUser!!.email)
-        }
-
-        spinUsers.setOnItemSelectedListener { view, position, id, item ->
-            mSelectedUser = mUsers[position]
-            changeBtnName(mSelectedUser!!.email)
-        }
-
+    override fun showUsers(users: ArrayList<Response.User>) {
+        mUsers = users
+        spinUsers.setItems(mUsers.map { it.email })
+        mSelectedUser = mUsers[0]
+        changeBtnName(mSelectedUser!!.email)
     }
 
     private fun setupShareBtn() {
@@ -99,6 +94,7 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
 
     override fun showLoading() {
         btnShare.alpha = 0.5f
+        ivShare.alpha = 0.5f
         btnShare.isEnabled = false
         spinUsers.isEnabled = false
         ivShare.isEnabled = false
@@ -107,6 +103,7 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
 
     override fun hideLoading() {
         btnShare.alpha = 1.0f
+        ivShare.alpha = 1.0f
         btnShare.isEnabled = true
         spinUsers.isEnabled = true
         ivShare.isEnabled = false
