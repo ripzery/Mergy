@@ -20,7 +20,7 @@ class MergePresenter(private val mView: MergeContract.View) : MergeContract.Pres
                 setCancelVisibility(true)
                 setSaveVisibility(false)
                 setShareVisibility(false)
-                setScalableViewVisibility(false)
+                setScalableViewVisibility(true)
                 setLoadingVisibility(true)
                 setPhotoAlpha(0.7f)
                 setCancelEnabled(false)
@@ -31,6 +31,7 @@ class MergePresenter(private val mView: MergeContract.View) : MergeContract.Pres
                 }
                 setBackground(bgTask.await())
                 setCancelEnabled(true)
+                setScalableViewVisibility(false)
                 setLoadingVisibility(false)
                 setShareEnabled(true)
                 setShareVisibility(true)
