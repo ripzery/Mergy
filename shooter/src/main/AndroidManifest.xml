@@ -21,7 +21,9 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-        <activity android:name=".ShooterActivity" />
+        <activity
+            android:name=".ShooterActivity"
+            android:launchMode="singleTop" />
     </application>
 
 </manifest>

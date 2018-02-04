@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="me.ripzery.mergy.merge.GalleryFragment">
+    tools:context=".ui.merge.GalleryFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"

@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        tools:context="me.ripzery.mergy.merge.MergeActivity">
+        tools:context=".ui.merge.MergeActivity">
 
         <FrameLayout
             android:id="@+id/container"
@@ -28,7 +28,7 @@
                 android:adjustViewBounds="true"
                 android:src="@drawable/bg" />
 
-            <me.ripzery.mergy.ScalableLayout
+            <me.ripzery.mergy.viewgroups.ScalableLayout
                 android:id="@+id/scalableLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

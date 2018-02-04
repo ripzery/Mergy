@@ -11,14 +11,13 @@
         android:id="@+id/spinUsers"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:layout_margin="8dp"
-        />
+        android:layout_margin="8dp" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        tools:context="me.ripzery.mergy.share.ShareActivity">
+        tools:context=".ui.share.ShareActivity">
 
         <ImageView
             android:id="@+id/ivShare"
@@ -34,7 +33,7 @@
     <Button
         android:id="@+id/btnShare"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="64dp"
         android:layout_gravity="bottom"
         android:layout_margin="8dp"
         android:text="@string/share"

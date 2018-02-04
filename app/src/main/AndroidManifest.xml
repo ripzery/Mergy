@@ -27,20 +27,27 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".merge.MergeActivity" />
+
+        <activity
+            android:name="me.ripzery.mergy.ui.merge.MergeActivity"
+            android:launchMode="singleTop" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="31fd1ff4d9e09f5aacca0104abd1d8aae00fb456" />
 
-        <activity android:name=".share.ShareActivity"></activity>
+        <activity
+            android:name="me.ripzery.mergy.ui.share.ShareActivity"
+            android:launchMode="singleTop" />
     </application>
 
 </manifest>

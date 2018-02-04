@@ -1,4 +1,4 @@
-package me.ripzery.mergy.merge
+package me.ripzery.mergy.viewgroups
 
 import android.content.Context
 import android.graphics.Bitmap

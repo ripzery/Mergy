@@ -1,4 +1,4 @@
-package me.ripzery.mergy
+package me.ripzery.mergy.viewgroups
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
+import me.ripzery.mergy.R
 
 
 /**

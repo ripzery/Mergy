@@ -1,4 +1,4 @@
-package me.ripzery.mergy.share
+package me.ripzery.mergy.ui.share
 
 import android.net.Uri
 import android.os.Bundle
@@ -17,7 +17,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class ShareActivity : AppCompatActivity() {
-
     private lateinit var mCurrentPhoto: Response.Photo
     private lateinit var mImageUri: Uri
     private lateinit var mUsers: ArrayList<Response.User>

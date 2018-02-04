@@ -1,4 +1,4 @@
-package me.ripzery.mergy.merge
+package me.ripzery.mergy.ui.merge
 
 import android.content.Intent
 import android.graphics.Bitmap
@@ -19,12 +19,15 @@ import kotlinx.coroutines.experimental.async
 import me.ripzery.bitmapkeeper.BitmapKeeper
 import me.ripzery.bitmapmerger.BitmapMerger
 import me.ripzery.mergy.R
-import me.ripzery.mergy.ScalableLayout
+import me.ripzery.mergy.viewgroups.ScalableLayout
 import me.ripzery.mergy.extensions.logd
 import me.ripzery.mergy.extensions.toast
+import me.ripzery.mergy.helpers.PositionManager
+import me.ripzery.mergy.helpers.PositionManagerInterface
 import me.ripzery.mergy.network.DataProvider
 import me.ripzery.mergy.network.Response
-import me.ripzery.mergy.share.ShareActivity
+import me.ripzery.mergy.ui.share.ShareActivity
+import me.ripzery.mergy.viewgroups.BackgroundImageGroup
 import org.jetbrains.anko.coroutines.experimental.bg
 
 

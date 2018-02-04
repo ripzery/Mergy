@@ -1,9 +1,8 @@
-package me.ripzery.mergy.merge
+package me.ripzery.mergy.helpers
 
 import android.graphics.Point
 import android.graphics.PointF
 import android.graphics.Rect
-import android.graphics.RectF
 import kotlinx.android.synthetic.main.scalable_layout.view.*
 import me.ripzery.bitmapmerger.Position
 

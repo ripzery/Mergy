@@ -1,4 +1,4 @@
-package me.ripzery.mergy.merge
+package me.ripzery.mergy.ui.merge
 
 import android.content.Context
 import android.os.Bundle
@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.viewgroup_layout_background.view.*
 import me.ripzery.mergy.R
 import me.ripzery.mergy.extensions.logd
 import me.ripzery.mergy.network.Response
+import me.ripzery.mergy.viewgroups.BackgroundImageGroup
 
 class GalleryFragment : Fragment() {
     private lateinit var mBackgroundDataList: ArrayList<Response.Photo>
@@ -42,7 +43,7 @@ class GalleryFragment : Fragment() {
         if (context is BackgroundImageGroup.OnImageSelectedListener) {
             mListener = context
         } else {
-            throw RuntimeException(context!!.toString() + " must implement me.ripzery.mergy.merge.GalleryFragment.OnImageSelectedListener")
+            throw RuntimeException(context!!.toString() + " must implement me.ripzery.mergy.ui.merge.GalleryFragment.OnImageSelectedListener")
         }
     }
 

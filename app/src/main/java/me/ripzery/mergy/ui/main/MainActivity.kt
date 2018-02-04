@@ -1,4 +1,4 @@
-package me.ripzery.mergy
+package me.ripzery.mergy.ui.main
 
 import android.app.Activity
 import android.content.Intent
@@ -8,13 +8,11 @@ import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import com.crashlytics.android.Crashlytics
-import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_toolbar.*
+import me.ripzery.mergy.R
 import me.ripzery.mergy.extensions.toast
-import me.ripzery.mergy.merge.MergeActivity
+import me.ripzery.mergy.ui.merge.MergeActivity
 import me.ripzery.shooter.ShooterActivity
 
 

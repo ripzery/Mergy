@@ -1,8 +1,8 @@
-package me.ripzery.mergy.merge
+package me.ripzery.mergy.helpers
 
 import android.graphics.drawable.Drawable
 import me.ripzery.bitmapmerger.Position
-import me.ripzery.mergy.ScalableLayout
+import me.ripzery.mergy.viewgroups.ScalableLayout
 
 
 /**
