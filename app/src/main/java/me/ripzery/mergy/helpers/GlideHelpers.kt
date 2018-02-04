@@ -22,6 +22,5 @@ object GlideHelpers {
     fun defaultRequestOptions(): RequestOptions {
         return RequestOptions()
                 .error(R.drawable.error)
-                .apply(noCache())
     }
 }

@@ -13,13 +13,11 @@ import me.ripzery.mergy.network.Response
  */
 
 class SharePresenter(private val mView: ShareContract.View) : ShareContract.Presenter {
-    private val mockEmail = "ripzery@gmail.com"
-
     override fun handleShare(user: Response.User, photo: Response.Photo, img: Uri) {
         val reqSendEmail = Request.SendEmail(
-                mockEmail,
-                user.userProfileId,
                 user.email,
+                user.userProfileId,
+                "",
                 user.firstName,
                 user.lastName,
                 photo.seasonId,
