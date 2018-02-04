@@ -95,7 +95,7 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
             R.id.menu_save -> mMergePresenter.handleSaveClicked(mBitmapBG, mSticker)
             R.id.menu_cancel -> mMergePresenter.handleCancelClicked(mBitmapBG)
             R.id.menu_share -> {
-                if (mCurrentMergedImage != null) {
+                if (mCurrentMergedImage != null && mCurrentPhoto != null) {
                     startShareActivity()
                 } else {
                     toast("Please merge image first.")

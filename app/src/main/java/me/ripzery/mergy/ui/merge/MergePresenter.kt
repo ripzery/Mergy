@@ -59,6 +59,7 @@ class MergePresenter(private val mView: MergeContract.View) : MergeContract.Pres
             setScalableViewVisibility(true)
             setSaveVisibility(true)
             setCancelVisibility(false)
+            setShareVisibility(false)
         }
     }
 }

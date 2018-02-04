@@ -4,11 +4,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import android.view.View
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_share.*
 import kotlinx.android.synthetic.main.layout_toolbar.*
 import me.ripzery.mergy.R
-import me.ripzery.mergy.extensions.logd
+import me.ripzery.mergy.extensions.toast
 import me.ripzery.mergy.helpers.Base64Helper
 import me.ripzery.mergy.network.DataProvider
 import me.ripzery.mergy.network.Request
@@ -16,11 +17,13 @@ import me.ripzery.mergy.network.Response
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ShareActivity : AppCompatActivity() {
+class ShareActivity : AppCompatActivity(), ShareContract.View {
     private lateinit var mCurrentPhoto: Response.Photo
     private lateinit var mImageUri: Uri
     private lateinit var mUsers: ArrayList<Response.User>
+    private val mSharePresenter: ShareContract.Presenter by lazy { SharePresenter(this) }
     private var mSelectedUser: Response.User? = null
+    private val mockEmail = "ripzery@gmail.com"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,25 +74,41 @@ class ShareActivity : AppCompatActivity() {
 
     private fun setupShareBtn() {
         btnShare.setOnClickListener {
-            Base64Helper.encrypt(this, mImageUri) {
-                with(mCurrentPhoto) {
-                    val requestSendEmail = Request.SendEmail(
-                            "ripzery@gmail.com",
-                            mSelectedUser!!.userProfileId,
-                            "",
-                            mSelectedUser!!.firstName,
-                            mSelectedUser!!.lastName,
-                            mCurrentPhoto.seasonId,
-                            mCurrentPhoto.imageId
-                    )
-                    val requestUpload = Request.Upload(it, 1)
-                    DataProvider.uploadThenSendEmail(requestUpload, requestSendEmail) {
-                        logd(it.toString())
-                    }
-                }
+            if (mSelectedUser != null) {
+                mSharePresenter.handleShare(mSelectedUser!!, mCurrentPhoto, mImageUri)
+            } else {
+                toast("Please select the user first")
             }
-
         }
+    }
+
+    override fun updateThenSendEmail(reqUpload: Request.Upload, reqSendEmail: Request.SendEmail, onSuccess: (Response.SendEmail) -> Unit) {
+        DataProvider.uploadThenSendEmail(reqUpload, reqSendEmail) {
+            toast("The image is sent to $mockEmail successfully.")
+            onSuccess(it)
+        }
+    }
+
+    override fun encryptBase64(callback: (String) -> Unit) {
+        Base64Helper.encrypt(this, mImageUri) {
+            callback(it)
+        }
+    }
+
+    override fun showLoading() {
+        btnShare.alpha = 0.5f
+        btnShare.isEnabled = false
+        spinUsers.isEnabled = false
+        ivShare.isEnabled = false
+        progressBar.visibility = View.VISIBLE
+    }
+
+    override fun hideLoading() {
+        btnShare.alpha = 1.0f
+        btnShare.isEnabled = true
+        spinUsers.isEnabled = true
+        ivShare.isEnabled = false
+        progressBar.visibility = View.GONE
     }
 
     override fun onStop() {
