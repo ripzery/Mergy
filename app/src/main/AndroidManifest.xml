@@ -29,25 +29,36 @@
 
         <activity
             android:name=".ui.main.MainActivity"
-            android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
+            android:launchMode="singleTop"
+            android:screenOrientation="landscape" />
         <activity
-            android:name="me.ripzery.mergy.ui.merge.MergeActivity"
-            android:launchMode="singleTop" />
+            android:name=".ui.merge.MergeActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="landscape" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="31fd1ff4d9e09f5aacca0104abd1d8aae00fb456" />
 
         <activity
-            android:name="me.ripzery.mergy.ui.share.ShareActivity"
-            android:launchMode="singleTop" />
+            android:name=".ui.share.ShareActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".StartActivity"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".AgreementActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".RemoveGreenScreenActivity"
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>
