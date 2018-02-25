@@ -34,7 +34,7 @@ class GalleryFragment : Fragment() {
         mGalleryViewModel.retrieveGallery().observe(this, Observer { photoList ->
             if (photoList != null) {
                 mCurrentList.addAll(photoList)
-                mAdapter.addPhotos(photoList)
+                mAdapter.addPhotos(ArrayList(mCurrentList.filter { it.imageType == mMode }))
             }
         })
         btnLandscape.setOnClickListener { changeBGMode(LANDSCAPE_MODE) }

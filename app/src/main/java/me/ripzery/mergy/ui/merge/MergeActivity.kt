@@ -9,15 +9,11 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_merge.*
-import kotlinx.android.synthetic.main.fragment_gallery.*
-import kotlinx.android.synthetic.main.layout_toolbar.*
 import me.ripzery.bitmapkeeper.BitmapKeeper
 import me.ripzery.bitmapmerger.BitmapMerger
 import me.ripzery.mergy.R
@@ -55,12 +51,8 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
     }
 
     private fun initInstance() {
-        setSupportActionBar(toolbar)
-        supportActionBar?.title = "Merge Image"
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         /* Initialize background and sticker images */
-        mBitmapBG = BitmapFactory.decodeResource(resources, R.drawable.bg)
+        mBitmapBG = BitmapFactory.decodeResource(resources, R.drawable.default_background)
         setBackground(mBitmapBG)
         scalableLayout.setImage(mSticker)
 
@@ -72,6 +64,12 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
                 .commit()
 
         observeBackgroundChanged()
+
+        btnSave.setOnClickListener {
+            mMergePresenter.handleSaveClicked(mBitmapBG, mSticker)
+        }
+
+        btnBack.setOnClickListener { finish() }
     }
 
 
@@ -83,14 +81,6 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
         mGalleryViewModel.subscribePhoto().observe(this, Observer {
             mCurrentPhoto = it
         })
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_merge, menu)
-        mMenuSave = menu?.findItem(R.id.menu_save)
-        mMenuCancel = menu?.findItem(R.id.menu_cancel)
-        mMenuShare = menu?.findItem(R.id.menu_share)
-        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -173,7 +163,13 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
     }
 
     override fun showSaveImageSuccess() {
-        toast("Saved image successfully.")
+        if (mCurrentMergedImage != null && mCurrentPhoto != null) {
+            toast("Saved image successfully.")
+            mMergePresenter.handleCancelClicked(mBitmapBG)
+            startShareActivity()
+        } else {
+            toast("Please merge image first.")
+        }
     }
 
     override fun getContainer(): View = container

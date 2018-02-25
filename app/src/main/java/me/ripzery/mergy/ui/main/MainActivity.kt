@@ -8,13 +8,11 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import me.ripzery.mergy.R
 import me.ripzery.mergy.RemoveGreenScreenActivity
 import me.ripzery.mergy.StartActivity
-import me.ripzery.mergy.ui.merge.MergeActivity
 import me.ripzery.shooter.BitmapOptimizer
 import me.ripzery.shooter.ImageDataCreator
 
@@ -42,6 +40,9 @@ class MainActivity : AppCompatActivity() {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             })
         }
+
+        layoutEmptyImage.setOnClickListener { dispatchTakePictureIntent() }
+        tvTakePhoto.setOnClickListener { dispatchTakePictureIntent() }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -81,6 +82,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun showMergeBtnIfNeeded() {
         btnMerge.isEnabled = mCurrentPhotoPath.isNotEmpty()
-        if(mCurrentPhotoPath.isNotEmpty()) btnMerge.setTextColor(ContextCompat.getColor(this, android.R.color.white))
+        if (mCurrentPhotoPath.isNotEmpty()) btnMerge.setTextColor(ContextCompat.getColor(this, android.R.color.white))
     }
 }
