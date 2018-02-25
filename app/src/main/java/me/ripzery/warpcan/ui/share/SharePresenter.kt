@@ -31,6 +31,7 @@ class SharePresenter(private val mView: ShareContract.View) : ShareContract.Pres
             mView.showLoading()
             mView.updateThenSendEmail(reqUpload, reqSendEmail) {
                 mView.hideLoading()
+                mView.showSuccessDialog()
             }
         }
     }

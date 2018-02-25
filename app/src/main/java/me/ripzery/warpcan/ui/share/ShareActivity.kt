@@ -23,6 +23,7 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
     private lateinit var mUsers: ArrayList<Response.User>
     private val mSharePresenter: ShareContract.Presenter by lazy { SharePresenter(this) }
     private var mSelectedUser: Response.User? = null
+    private val mSuccessDialog by lazy { IsetanDialog() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,6 +109,10 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
         spinUsers.isEnabled = true
         ivShare.isEnabled = false
         progressBar.visibility = View.GONE
+    }
+
+    override fun showSuccessDialog() {
+        mSuccessDialog.show(supportFragmentManager, "test")
     }
 
     @SuppressLint("SetTextI18n")
