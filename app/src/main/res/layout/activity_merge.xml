@@ -52,7 +52,7 @@
                 android:adjustViewBounds="true"
                 android:src="@drawable/default_background" />
 
-            <me.ripzery.mergy.viewgroups.ScalableLayout
+            <me.ripzery.warpcan.viewgroups.ScalableLayout
                 android:id="@+id/scalableLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

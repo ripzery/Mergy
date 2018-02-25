@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="me.ripzery.mergy">
+    package="me.ripzery.warpcan">
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".MergyApplication"
+        android:name="me.ripzery.warpcan.MergyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -19,7 +19,7 @@
         android:theme="@style/AppTheme">
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="me.ripzery.mergy.fileprovider"
+            android:authorities="me.ripzery.warpcan.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -28,11 +28,11 @@
         </provider>
 
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name="me.ripzery.warpcan.ui.main.MainActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.merge.MergeActivity"
+            android:name="me.ripzery.warpcan.ui.merge.MergeActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
@@ -41,11 +41,11 @@
             android:value="31fd1ff4d9e09f5aacca0104abd1d8aae00fb456" />
 
         <activity
-            android:name=".ui.share.ShareActivity"
+            android:name="me.ripzery.warpcan.ui.share.ShareActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".StartActivity"
+            android:name="me.ripzery.warpcan.StartActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,10 +54,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AgreementActivity"
+            android:name="me.ripzery.warpcan.AgreementActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".RemoveGreenScreenActivity"
+            android:name="me.ripzery.warpcan.RemoveGreenScreenActivity"
             android:screenOrientation="portrait" />
     </application>
 
