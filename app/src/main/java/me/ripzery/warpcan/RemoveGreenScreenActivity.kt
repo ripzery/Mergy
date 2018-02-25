@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ImageView
-import kotlinx.android.synthetic.main.activity_shooter.*
+import kotlinx.android.synthetic.main.activity_remove_green_screen.*
 import kotlinx.android.synthetic.main.layout_toolbar.*
 import me.ripzery.bgcutter.BgCutter
 import me.ripzery.bitmapkeeper.BitmapKeeper

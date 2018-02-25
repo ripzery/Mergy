@@ -31,6 +31,7 @@ class BackgroundImageGroup constructor(
     private lateinit var mRootLayout: FrameLayout
     private var mBackground: Bitmap? = null
     private var mPhoto: Response.Photo? = null
+    private var mFirst: Boolean = false
     private var mGalleryViewModel: GalleryViewModel? = null
 
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0) {
@@ -52,6 +53,10 @@ class BackgroundImageGroup constructor(
         mRootLayout.tvCaption.text = caption
     }
 
+    fun setFirstImage(first: Boolean) {
+        mFirst = first
+    }
+
     fun setImageBackground(photo: Response.Photo) {
         mPhoto = photo
         val width = resources.getDimension(R.dimen.backgroundWidth)
@@ -65,6 +70,9 @@ class BackgroundImageGroup constructor(
                         progressBar.visibility = View.GONE
                         mBackground = resource
                         mRootLayout.ivBackground.setImageBitmap(resource)
+                        if (mFirst) {
+                            mGalleryViewModel?.select(resource, photo)
+                        }
                     }
 
                     override fun onLoadFailed(errorDrawable: Drawable?) {

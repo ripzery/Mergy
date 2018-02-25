@@ -20,6 +20,7 @@ class GalleryFragment : Fragment() {
     private val mGalleryViewModel: GalleryViewModel by lazy { ViewModelProviders.of(activity!!).get(GalleryViewModel::class.java) }
     private lateinit var mAdapter: GalleryRecyclerAdapter
     private var mMode: Int = GalleryFragment.LANDSCAPE_MODE
+    private var mFirstId: Int = 0
     private var mCurrentList: ArrayList<Response.Photo> = arrayListOf()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -33,8 +34,12 @@ class GalleryFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         mGalleryViewModel.retrieveGallery().observe(this, Observer { photoList ->
             if (photoList != null) {
+                val filteredTypePhotoList = ArrayList(photoList.filter { it.imageType == mMode })
+                if (filteredTypePhotoList[0] != null) {
+                    mFirstId = filteredTypePhotoList[0].imageId
+                }
                 mCurrentList.addAll(photoList)
-                mAdapter.addPhotos(ArrayList(mCurrentList.filter { it.imageType == mMode }))
+                mAdapter.addPhotos(filteredTypePhotoList)
             }
         })
         btnLandscape.setOnClickListener { changeBGMode(LANDSCAPE_MODE) }
@@ -93,6 +98,7 @@ class GalleryFragment : Fragment() {
                 with(rootView.backgroundImageGroup) {
                     logd(backgroundData.toString())
                     setImageBackground(backgroundData)
+                    setFirstImage(mFirstId == backgroundData.imageId)
                     setGalleryViewModel(mGalleryViewModel)
                 }
             }
