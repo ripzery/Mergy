@@ -17,24 +17,19 @@ class MergePresenter(private val mView: MergeContract.View) : MergeContract.Pres
     override fun handleSaveClicked(bg: Bitmap, sticker: Bitmap) {
         with(mView) {
             async(UI) {
-                setCancelVisibility(true)
-                setSaveVisibility(false)
-                setShareVisibility(false)
+                setSaveEnabled(false)
                 setScalableViewVisibility(true)
                 setLoadingVisibility(true)
                 setPhotoAlpha(0.7f)
-                setCancelEnabled(false)
                 val bgTask = bg {
                     val newBitmap = merge(bg, sticker)
                     setMergedImageUri(saveToDevice(newBitmap))
                     newBitmap
                 }
                 setBackground(bgTask.await())
-                setCancelEnabled(true)
                 setScalableViewVisibility(false)
                 setLoadingVisibility(false)
-                setShareEnabled(true)
-                setShareVisibility(true)
+                setSaveEnabled(true)
                 setPhotoAlpha(1.0f)
                 showSaveImageSuccess()
             }

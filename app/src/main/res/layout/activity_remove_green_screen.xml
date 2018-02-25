@@ -20,9 +20,33 @@
             android:background="@color/colorBackgroundImage"
             android:maxHeight="450dp"
             android:minHeight="300dp"
-            android:visibility="gone"
-            android:scaleType="fitEnd" />
+            android:scaleType="fitEnd"
+            android:visibility="gone" />
 
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="visible"
+            android:orientation="vertical">
+
+            <ProgressBar
+                android:id="@+id/loading"
+                android:layout_width="64dp"
+                android:layout_height="64dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/round_less_padding_btn"
+                android:text="Loading..."
+                android:textColor="@android:color/white"
+                android:textSize="20sp" />
+
+        </LinearLayout>
 
     </FrameLayout>
 

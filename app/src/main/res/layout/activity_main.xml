@@ -72,6 +72,7 @@
             android:background="@drawable/btn_next_selector"
             android:enabled="false"
             android:text="Next"
+            android:textSize="20sp"
             android:textColor="@color/colorGrey" />
 
     </LinearLayout>

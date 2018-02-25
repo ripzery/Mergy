@@ -37,7 +37,6 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
     private val mMergePresenter: MergeContract.Presenter by lazy { MergePresenter(this) }
     private var mCurrentMergedImage: Uri? = null
     private var mMenuShare: MenuItem? = null
-    private var mMenuSave: MenuItem? = null
     private var mMenuCancel: MenuItem? = null
     private var mCurrentPhoto: Response.Photo? = null
     private lateinit var mGalleryFragment: GalleryFragment
@@ -127,15 +126,15 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
     }
 
     override fun setSaveVisibility(visible: Boolean) {
-        mMenuSave?.isVisible = visible
+//        btnSave?.isVisible = visible
     }
 
     override fun setCancelVisibility(visible: Boolean) {
-        mMenuCancel?.isVisible = visible
+//        mMenuCancel?.isVisible = visible
     }
 
     override fun setShareVisibility(visible: Boolean) {
-        mMenuShare?.isVisible = visible
+//        mMenuShare?.isVisible = visible
     }
 
     override fun setLoadingVisibility(visible: Boolean) {
@@ -147,15 +146,15 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
     }
 
     override fun setSaveEnabled(enable: Boolean) {
-        mMenuSave?.isEnabled = enable
+        btnSave?.isEnabled = enable
     }
 
     override fun setCancelEnabled(enable: Boolean) {
-        mMenuCancel?.isEnabled = enable
+//        mMenuCancel?.isEnabled = enable
     }
 
     override fun setShareEnabled(enable: Boolean) {
-        mMenuShare?.isEnabled = enable
+//        mMenuShare?.isEnabled = enable
     }
 
     override fun setMergedImageUri(uri: Uri) {
@@ -168,7 +167,7 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
             mMergePresenter.handleCancelClicked(mBitmapBG)
             startShareActivity()
         } else {
-            toast("Please merge image first.")
+            toast("Please select the background image first.")
         }
     }
 
