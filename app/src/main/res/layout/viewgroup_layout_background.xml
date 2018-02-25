@@ -2,4 +2,8 @@
 <me.ripzery.mergy.viewgroups.BackgroundImageGroup xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/backgroundImageGroup"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent"
+    android:layout_marginTop="24dp"
+    android:layout_marginBottom="24dp"
+    android:layout_marginLeft="12dp"
+    android:layout_marginRight="12dp"/>

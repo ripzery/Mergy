@@ -30,11 +30,11 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.merge.MergeActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
@@ -43,10 +43,10 @@
         <activity
             android:name=".ui.share.ShareActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".StartActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -55,10 +55,10 @@
         </activity>
         <activity
             android:name=".AgreementActivity"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".RemoveGreenScreenActivity"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

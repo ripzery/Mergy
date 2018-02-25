@@ -79,8 +79,4 @@ class BackgroundImageGroup constructor(
     fun setGalleryViewModel(listener: GalleryViewModel) {
         mGalleryViewModel = listener
     }
-
-    interface OnImageSelectedListener {
-        fun onBackgroundSelected(bg: Bitmap, photo: Response.Photo)
-    }
 }

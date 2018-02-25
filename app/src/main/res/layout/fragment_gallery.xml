@@ -1,8 +1,43 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/backgroundHeight"
+    android:background="@color/colorPrimary"
+    android:orientation="horizontal"
     tools:context=".ui.merge.gallery.GalleryFragment">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="24dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="12dp"
+        android:paddingTop="24dp">
+
+        <Button
+            android:id="@+id/btnPanorama"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_gallery_unselected"
+            android:text="Panorama"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="18dp" />
+
+        <Button
+            android:id="@+id/btnLandscape"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/btn_gallery_selected"
+            android:text="Landscape"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18dp" />
+
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -10,4 +45,4 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom" />
 
-</FrameLayout>
+</LinearLayout>

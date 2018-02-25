@@ -9,12 +9,14 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_merge.*
+import kotlinx.android.synthetic.main.fragment_gallery.*
 import kotlinx.android.synthetic.main.layout_toolbar.*
 import me.ripzery.bitmapkeeper.BitmapKeeper
 import me.ripzery.bitmapmerger.BitmapMerger
@@ -45,6 +47,7 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
     private lateinit var mGalleryFragment: GalleryFragment
     private lateinit var mBitmapBG: Bitmap
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_merge)
@@ -70,6 +73,7 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
 
         observeBackgroundChanged()
     }
+
 
     private fun observeBackgroundChanged() {
         mGalleryViewModel.subscribeBitmap().observe(this, Observer {
