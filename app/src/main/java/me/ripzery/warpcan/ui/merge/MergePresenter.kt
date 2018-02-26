@@ -1,8 +1,11 @@
 package me.ripzery.warpcan.ui.merge
 
 import android.graphics.Bitmap
+import android.net.Uri
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
+import me.ripzery.warpcan.network.DataProvider
+import me.ripzery.warpcan.network.Request
 import org.jetbrains.anko.coroutines.experimental.bg
 
 
@@ -15,6 +18,7 @@ import org.jetbrains.anko.coroutines.experimental.bg
 
 class MergePresenter(private val mView: MergeContract.View) : MergeContract.Presenter {
     override fun handleSaveClicked(bg: Bitmap, sticker: Bitmap) {
+        var mUri: Uri? = null
         with(mView) {
             async(UI) {
                 setSaveEnabled(false)
@@ -23,15 +27,25 @@ class MergePresenter(private val mView: MergeContract.View) : MergeContract.Pres
                 setPhotoAlpha(0.7f)
                 val bgTask = bg {
                     val newBitmap = merge(bg, sticker)
-                    setMergedImageUri(saveToDevice(newBitmap))
+                    mUri = saveToDevice(newBitmap)
+                    setMergedImageUri(mUri!!)
                     newBitmap
                 }
                 setBackground(bgTask.await())
                 setScalableViewVisibility(false)
-                setLoadingVisibility(false)
                 setSaveEnabled(true)
                 setPhotoAlpha(1.0f)
-                showSaveImageSuccess()
+                mView.showUploadingMessage()
+                mView.encryptBase64 {
+                    val reqUpload = Request.Upload(it, 1)
+                    DataProvider.upload(reqUpload, {
+                        mView.showSaveImageFailed("Cannot uploaded an image to the server. $it")
+                    }) {
+                        setLoadingVisibility(false)
+                        mView.showUploadingSuccess()
+                        mView.showSaveImageSuccess(it.message.imageUrl)
+                    }
+                }
             }
         }
     }

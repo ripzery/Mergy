@@ -27,7 +27,11 @@ interface MergeContract {
         fun setCancelEnabled(enable: Boolean)
         fun setShareEnabled(enable: Boolean)
         fun setMergedImageUri(uri: Uri)
-        fun showSaveImageSuccess()
+        fun showSaveImageSuccess(imageURL: String)
+        fun showSaveImageFailed(msg: String)
+        fun showUploadingMessage()
+        fun showUploadingSuccess()
+        fun encryptBase64(callback: (String) -> Unit)
     }
 
     interface Presenter {

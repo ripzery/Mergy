@@ -14,7 +14,7 @@ import me.ripzery.warpcan.network.Response
 
 interface ShareContract {
     interface View {
-        fun updateThenSendEmail(reqUpload: Request.Upload, reqSendEmail: Request.SendEmail, onSuccess: (Response.SendEmail) -> Unit)
+        fun sendEmail(reqSendEmail: Request.SendEmail, onSuccess: (Response.SendEmail) -> Unit)
         fun encryptBase64(callback: (String) -> Unit)
         fun showLoading()
         fun hideLoading()
@@ -24,7 +24,7 @@ interface ShareContract {
     }
 
     interface Presenter {
-        fun handleShare(user: Response.User, photo: Response.Photo, img: Uri)
+        fun handleShare(user: Response.User, photo: Response.Photo, imageURL: String)
         fun fetchUsers()
     }
 }

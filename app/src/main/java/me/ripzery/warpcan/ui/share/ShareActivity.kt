@@ -21,6 +21,7 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
     private lateinit var mCurrentPhoto: Response.Photo
     private lateinit var mImageUri: Uri
     private lateinit var mUsers: ArrayList<Response.User>
+    private lateinit var mImageURL: String
     private val mSharePresenter: ShareContract.Presenter by lazy { SharePresenter(this) }
     private var mSelectedUser: Response.User? = null
     private val mSuccessDialog by lazy { IsetanDialog() }
@@ -30,6 +31,7 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
         setContentView(R.layout.activity_share)
         mImageUri = Uri.parse(intent.getStringExtra("result"))
         mCurrentPhoto = intent.getParcelableExtra("photo")
+        mImageURL = intent.getStringExtra("imageURL")
         initInstance()
     }
 
@@ -73,15 +75,17 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
     private fun setupShareBtn() {
         btnShare.setOnClickListener {
             if (mSelectedUser != null) {
-                mSharePresenter.handleShare(mSelectedUser!!, mCurrentPhoto, mImageUri)
+                mSharePresenter.handleShare(mSelectedUser!!, mCurrentPhoto, mImageURL)
             } else {
                 toast("Please select the user first")
             }
         }
     }
 
-    override fun updateThenSendEmail(reqUpload: Request.Upload, reqSendEmail: Request.SendEmail, onSuccess: (Response.SendEmail) -> Unit) {
-        DataProvider.uploadThenSendEmail(reqUpload, reqSendEmail) {
+    override fun sendEmail(reqSendEmail: Request.SendEmail, onSuccess: (Response.SendEmail) -> Unit) {
+        DataProvider.sendEmail(reqSendEmail, {
+            toast("Cannot sent an email. $it")
+        }) {
             toast("The image is sent to ${reqSendEmail.email} successfully.")
             onSuccess(it)
         }

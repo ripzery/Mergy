@@ -73,6 +73,30 @@ object DataProvider {
         mDisposable.add(d)
     }
 
+    fun sendEmail(request: Request.SendEmail, failed: (Throwable) -> Unit, success: (Response.SendEmail) -> Unit) {
+        val d = ApiService.Isetan.sendEmail(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    success(it)
+                }, {
+                    failed(it)
+                })
+        mDisposable.add(d)
+    }
+
+    fun upload(request: Request.Upload, failed: (Throwable) -> Unit, success: (Response.Upload) -> Unit) {
+        val d = ApiService.Isetan.upload(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    success(it)
+                }, {
+                    failed(it)
+                })
+        mDisposable.add(d)
+    }
+
     fun unsubscribe() {
         mDisposable.clear()
     }

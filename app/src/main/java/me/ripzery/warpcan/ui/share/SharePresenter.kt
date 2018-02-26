@@ -1,6 +1,5 @@
 package me.ripzery.warpcan.ui.share
 
-import android.net.Uri
 import me.ripzery.warpcan.network.DataProvider
 import me.ripzery.warpcan.network.Request
 import me.ripzery.warpcan.network.Response
@@ -16,23 +15,20 @@ import java.util.*
  */
 
 class SharePresenter(private val mView: ShareContract.View) : ShareContract.Presenter {
-    override fun handleShare(user: Response.User, photo: Response.Photo, img: Uri) {
+    override fun handleShare(user: Response.User, photo: Response.Photo, imageURL: String) {
         val reqSendEmail = Request.SendEmail(
                 user.email,
                 user.userProfileId,
-                "",
+                imageURL,
                 user.firstName,
                 user.lastName,
                 photo.seasonId,
                 photo.imageId
         )
-        mView.encryptBase64 {
-            val reqUpload = Request.Upload(it, 1)
-            mView.showLoading()
-            mView.updateThenSendEmail(reqUpload, reqSendEmail) {
-                mView.hideLoading()
-                mView.showSuccessDialog()
-            }
+        mView.showLoading()
+        mView.sendEmail(reqSendEmail) {
+            mView.hideLoading()
+            mView.showSuccessDialog()
         }
     }
 
