@@ -29,6 +29,6 @@
     </style>
 
     <style name="MergePreview">
-        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_gravity">center_horizontal</item>
     </style>
 </resources>

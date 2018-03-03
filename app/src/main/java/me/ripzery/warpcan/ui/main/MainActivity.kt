@@ -8,25 +8,32 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
+import me.ripzery.shooter.BitmapOptimizer
+import me.ripzery.shooter.ImageDataCreator
 import me.ripzery.warpcan.R
 import me.ripzery.warpcan.RemoveGreenScreenActivity
 import me.ripzery.warpcan.StartActivity
-import me.ripzery.shooter.BitmapOptimizer
-import me.ripzery.shooter.ImageDataCreator
 
 
 class MainActivity : AppCompatActivity() {
     private val REQUEST_IMAGE_CAPTURE = 1
     private lateinit var mCurrentPhotoPath: String
-    private var mMenuNext: MenuItem? = null
     private lateinit var mImageUri: Uri
 
+    companion object {
+        const val SAVED_STATE_PHOTO_PATH = "PHOTO_PATH"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        savedInstanceState?.let {
+            mImageUri = Uri.parse(it.getString(SAVED_STATE_PHOTO_PATH))
+            showImageResult()
+        }
+
         btnTakePhoto.setOnClickListener {
             dispatchTakePictureIntent()
         }
@@ -49,14 +56,22 @@ class MainActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 REQUEST_IMAGE_CAPTURE -> {
-                    mCurrentPhotoPath = getRealPathFromURI(mImageUri)
-                    val optimizer = BitmapOptimizer(mCurrentPhotoPath)
-                    ivPhoto.setImageBitmap(optimizer.optimize(ivPhoto.maxHeight))
-                    mCurrentPhotoPath = getRealPathFromURI(mImageUri)
-                    showMergeBtnIfNeeded()
+                    showImageResult()
                 }
             }
         }
+    }
+
+    private fun showImageResult() {
+        mCurrentPhotoPath = getRealPathFromURI(mImageUri)
+        val optimizer = BitmapOptimizer(mCurrentPhotoPath)
+        ivPhoto.setImageBitmap(optimizer.optimize(ivPhoto.maxHeight))
+        showMergeBtnIfNeeded()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.putString(SAVED_STATE_PHOTO_PATH, mImageUri.toString())
+        super.onSaveInstanceState(outState)
     }
 
     private fun getRealPathFromURI(contentUri: Uri): String {

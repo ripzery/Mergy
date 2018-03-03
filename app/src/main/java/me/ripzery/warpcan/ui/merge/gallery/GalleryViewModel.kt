@@ -3,6 +3,7 @@ package me.ripzery.warpcan.ui.merge.gallery
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.graphics.Bitmap
+import me.ripzery.warpcan.extensions.logd
 import me.ripzery.warpcan.network.Response
 
 
@@ -25,6 +26,7 @@ class GalleryViewModel : ViewModel() {
     fun subscribePhoto() = mPhotoLiveData
 
     fun select(bitmap: Bitmap, photo: Response.Photo) {
+        logd(photo.imageId.toString())
         mBitmapLiveData.value = bitmap
         mPhotoLiveData.value = photo
     }

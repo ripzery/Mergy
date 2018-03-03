@@ -28,7 +28,7 @@ class BitmapKeeper(val bitmap: Bitmap) {
 
         mFile = File(file.absolutePath + "/" + DEFAULT_IMAGE_NAME + ".png")
         val out = FileOutputStream(mFile)
-        bitmap.compress(Bitmap.CompressFormat.PNG, 90, out)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
         out.flush()
         out.close()
         val image = getImageContent(mFile, DEFAULT_IMAGE_NAME, context)

@@ -42,7 +42,7 @@ class RemoveGreenScreenActivity : AppCompatActivity() {
 
     private fun setCapturedImage(target: ImageView, onCompleted: (Uri) -> Unit) {
         // Visible the preview image
-        ivGreenPhoto.visibility = View.VISIBLE
+        ivGreenPhoto.visibility = View.GONE
 
         // Optimize the image
         val optimizedBitmap = mBitmapOptimizer.optimize(target.maxHeight)

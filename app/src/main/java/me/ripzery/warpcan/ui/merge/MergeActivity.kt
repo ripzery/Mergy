@@ -15,9 +15,11 @@ import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_merge.*
+import kotlinx.android.synthetic.main.layout_merge_preview.*
 import me.ripzery.bitmapkeeper.BitmapKeeper
 import me.ripzery.bitmapmerger.BitmapMerger
 import me.ripzery.warpcan.R
+import me.ripzery.warpcan.extensions.logd
 import me.ripzery.warpcan.extensions.toast
 import me.ripzery.warpcan.helpers.Base64Helper
 import me.ripzery.warpcan.helpers.PositionManager
@@ -38,12 +40,13 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
     private val mGalleryViewModel: GalleryViewModel by lazy { ViewModelProviders.of(this).get(GalleryViewModel::class.java) }
     private val mMergePresenter: MergeContract.Presenter by lazy { MergePresenter(this) }
     private var mCurrentMergedImage: Uri? = null
-    private var mMenuShare: MenuItem? = null
-    private var mMenuCancel: MenuItem? = null
     private var mCurrentPhoto: Response.Photo? = null
     private lateinit var mGalleryFragment: GalleryFragment
     private lateinit var mBitmapBG: Bitmap
 
+    companion object {
+        const val CURRENT_PHOTO = "CURRENT_PHOTO"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +75,6 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
 
         btnBack.setOnClickListener { finish() }
     }
-
 
     private fun observeBackgroundChanged() {
         mGalleryViewModel.subscribeBitmap().observe(this, Observer {

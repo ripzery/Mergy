@@ -70,7 +70,7 @@ class BackgroundImageGroup constructor(
                         progressBar.visibility = View.GONE
                         mBackground = resource
                         mRootLayout.ivBackground.setImageBitmap(resource)
-                        if (mFirst) {
+                        if (mFirst && mGalleryViewModel?.subscribeBitmap()?.value == null) {
                             mGalleryViewModel?.select(resource, photo)
                         }
                     }
