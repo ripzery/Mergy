@@ -1,8 +1,11 @@
 package me.ripzery.warpcan
 
 import android.app.Application
+import android.content.Context
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
+import okhttp3.Cache
+import java.io.File
 
 
 /**
@@ -16,5 +19,14 @@ class MergyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         Fabric.with(this, Crashlytics())
+        val httpCacheDirectory = File(applicationContext.cacheDir, "responses")
+        val cacheSize = 10 * 1024 * 1024 // 10 MiB
+        cache = Cache(httpCacheDirectory, cacheSize.toLong())
+        context = applicationContext
+    }
+
+    companion object {
+        lateinit var cache: Cache
+        lateinit var context: Context
     }
 }

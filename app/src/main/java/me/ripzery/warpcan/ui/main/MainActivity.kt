@@ -19,7 +19,7 @@ import me.ripzery.warpcan.StartActivity
 class MainActivity : AppCompatActivity() {
     private val REQUEST_IMAGE_CAPTURE = 1
     private lateinit var mCurrentPhotoPath: String
-    private lateinit var mImageUri: Uri
+    private var mImageUri: Uri? = null
 
     companion object {
         const val SAVED_STATE_PHOTO_PATH = "PHOTO_PATH"
@@ -30,8 +30,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         savedInstanceState?.let {
-            mImageUri = Uri.parse(it.getString(SAVED_STATE_PHOTO_PATH))
-            showImageResult()
+            if(it.getString(SAVED_STATE_PHOTO_PATH) != null) {
+                mImageUri = Uri.parse(it.getString(SAVED_STATE_PHOTO_PATH))
+                showImageResult()
+            }
         }
 
         btnTakePhoto.setOnClickListener {
@@ -63,14 +65,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showImageResult() {
-        mCurrentPhotoPath = getRealPathFromURI(mImageUri)
+        mCurrentPhotoPath = getRealPathFromURI(mImageUri!!)
         val optimizer = BitmapOptimizer(mCurrentPhotoPath)
         ivPhoto.setImageBitmap(optimizer.optimize(ivPhoto.maxHeight))
         showMergeBtnIfNeeded()
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.putString(SAVED_STATE_PHOTO_PATH, mImageUri.toString())
+        if (mImageUri != null) {
+            outState?.putString(SAVED_STATE_PHOTO_PATH, mImageUri.toString())
+        }
         super.onSaveInstanceState(outState)
     }
 
