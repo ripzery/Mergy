@@ -23,7 +23,10 @@ import me.ripzery.warpcan.extensions.toast
 import me.ripzery.warpcan.helpers.Base64Helper
 import me.ripzery.warpcan.helpers.PositionManager
 import me.ripzery.warpcan.helpers.PositionManagerInterface
+import me.ripzery.warpcan.network.Request
 import me.ripzery.warpcan.network.Response
+import me.ripzery.warpcan.ui.custom.IsetanDialog
+import me.ripzery.warpcan.ui.custom.RetryViewModel
 import me.ripzery.warpcan.ui.merge.gallery.GalleryFragment
 import me.ripzery.warpcan.ui.merge.gallery.GalleryViewModel
 import me.ripzery.warpcan.ui.share.ShareActivity
@@ -37,6 +40,7 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
         MediaStore.Images.Media.getBitmap(this.contentResolver, intent.data)
     }
     private val mGalleryViewModel: GalleryViewModel by lazy { ViewModelProviders.of(this).get(GalleryViewModel::class.java) }
+    private val mRetryViewModel: RetryViewModel by lazy { ViewModelProviders.of(this).get(RetryViewModel::class.java) }
     private val mMergePresenter: MergeContract.Presenter by lazy { MergePresenter(this) }
     private var mCurrentMergedImage: Uri? = null
     private var mCurrentPhoto: Response.Photo? = null
@@ -73,6 +77,10 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
         }
 
         btnBack.setOnClickListener { finish() }
+
+        mRetryViewModel.subscribeRequesting().observe(this, Observer {
+            mMergePresenter.handleSaveClicked(mBitmapBG, mSticker, mCurrentPhoto!!)
+        })
     }
 
     private fun observeBackgroundChanged() {
@@ -187,7 +195,9 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
         }
     }
 
-    override fun showSaveImageFailed(msg: String) {
+    override fun showSaveImageFailed(msg: String, request: Request.Retriable.Upload) {
+        val dialogRetry = IsetanDialog.newInstance(IsetanDialog.MODE_RETRY, request)
+        dialogRetry.show(supportFragmentManager, "retry")
         toast(msg)
     }
 

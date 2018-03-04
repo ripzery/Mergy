@@ -16,7 +16,7 @@ import java.util.*
 
 class SharePresenter(private val mView: ShareContract.View) : ShareContract.Presenter {
     override fun handleShare(user: Response.User, photo: Response.Photo, uploadResponse: Response.Upload) {
-        val reqSendEmail = Request.SendEmail(
+        val reqSendEmail = Request.Retriable.SendEmail(
                 user.email,
                 user.userProfileId,
                 uploadResponse.message.imageUrl,
@@ -28,7 +28,7 @@ class SharePresenter(private val mView: ShareContract.View) : ShareContract.Pres
         mView.showLoading()
         DataProvider.sendEmail(reqSendEmail, {
             mView.hideLoading()
-            mView.showShareFail(it)
+            mView.showShareFail(it, reqSendEmail)
         }) {
             mView.hideLoading()
             mView.showShareSuccess(reqSendEmail.email)

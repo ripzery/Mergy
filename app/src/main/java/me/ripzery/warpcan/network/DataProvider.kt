@@ -57,7 +57,7 @@ object DataProvider {
         mDisposable.add(d)
     }
 
-    fun uploadThenSendEmail(request: Request.Upload, request2: Request.SendEmail, callback: (Response.SendEmail) -> Unit) {
+    fun uploadThenSendEmail(request: Request.Retriable.Upload, request2: Request.Retriable.SendEmail, callback: (Response.SendEmail) -> Unit) {
         val d = ApiService.Isetan.upload(request)
                 .flatMap {
                     val imageUrl = it.message.imageUrl
@@ -73,7 +73,7 @@ object DataProvider {
         mDisposable.add(d)
     }
 
-    fun sendEmail(request: Request.SendEmail, failed: (Throwable) -> Unit, success: (Response.SendEmail) -> Unit) {
+    fun sendEmail(request: Request.Retriable.SendEmail, failed: (Throwable) -> Unit, success: (Response.SendEmail) -> Unit) {
         val d = ApiService.Isetan.sendEmail(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -85,7 +85,7 @@ object DataProvider {
         mDisposable.add(d)
     }
 
-    fun upload(request: Request.Upload, failed: (Throwable) -> Unit, success: (Response.Upload) -> Unit) {
+    fun upload(request: Request.Retriable.Upload, failed: (Throwable) -> Unit, success: (Response.Upload) -> Unit) {
         val d = ApiService.Isetan.upload(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

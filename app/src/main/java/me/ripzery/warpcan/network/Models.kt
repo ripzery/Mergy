@@ -14,23 +14,28 @@ import java.util.*
  */
 
 object Request {
-    data class Upload(
-            @SerializedName("base_64_image") val base64Image: String,
-            @SerializedName("season_id") val seasonId: Int,
-            @SerializedName("image_type_id") val imageTypeId: Int
-    )
+    sealed class Retriable : Parcelable {
+        @Parcelize
+        data class Upload(
+                @SerializedName("base_64_image") val base64Image: String,
+                @SerializedName("season_id") val seasonId: Int,
+                @SerializedName("image_type_id") val imageTypeId: Int
+        ) : Retriable()
+
+        @Parcelize
+        data class SendEmail(
+                @SerializedName("email") val email: String,
+                @SerializedName("user_profile_id") val userProfileId: Int,
+                @SerializedName("image_url") val imageUrl: String,
+                @SerializedName("fname") val firstName: String,
+                @SerializedName("lname") val lastName: String,
+                @SerializedName("season_id") val seasonId: Int,
+                @SerializedName("image_id") val imageId: Int
+        ) : Retriable()
+    }
+
 
     data class RetrieveUsers(val date: String)
-
-    data class SendEmail(
-            @SerializedName("email") val email: String,
-            @SerializedName("user_profile_id") val userProfileId: Int,
-            @SerializedName("image_url") val imageUrl: String,
-            @SerializedName("fname") val firstName: String,
-            @SerializedName("lname") val lastName: String,
-            @SerializedName("season_id") val seasonId: Int,
-            @SerializedName("image_id") val imageId: Int
-    )
 }
 
 object Response {

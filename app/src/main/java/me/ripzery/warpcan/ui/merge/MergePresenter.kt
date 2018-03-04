@@ -22,6 +22,7 @@ class MergePresenter(private val mView: MergeContract.View) : MergeContract.Pres
         var mUri: Uri? = null
         with(mView) {
             async(UI) {
+                setBackground(bg)
                 setSaveEnabled(false)
                 setScalableViewVisibility(true)
                 setLoadingVisibility(true)
@@ -36,20 +37,36 @@ class MergePresenter(private val mView: MergeContract.View) : MergeContract.Pres
                 setScalableViewVisibility(false)
                 setSaveEnabled(true)
                 setPhotoAlpha(1.0f)
-                mView.showUploadingMessage()
-                mView.encryptBase64 {
-                    val reqUpload = Request.Upload(it, 1, photo.imageType)
+                showUploadingMessage()
+                encryptBase64 {
+                    val reqUpload = Request.Retriable.Upload(it, 1, photo.imageType)
                     DataProvider.upload(reqUpload, {
-                        setLoadingVisibility(false)
-                        mView.showSaveImageFailed("Cannot uploaded an image to the server. $it")
+                        handleRequestFail(reqUpload)
                     }) {
-                        setLoadingVisibility(false)
-                        mView.showUploadingSuccess()
-                        mView.showSaveImageSuccess(it)
+                        handleRequestSuccess(it)
                     }
                 }
             }
         }
+    }
+
+    override fun handleRequestFail(request: Request.Retriable.Upload) {
+        mView.setLoadingVisibility(false)
+        mView.setSaveEnabled(true)
+        mView.showSaveImageFailed("Cannot uploaded an image to the server.", request)
+    }
+
+    override fun handleRequestSuccess(response: Response.Upload) {
+        mView.setLoadingVisibility(false)
+        mView.setSaveEnabled(true)
+        mView.showUploadingSuccess()
+        mView.showSaveImageSuccess(response)
+    }
+
+    override fun handleStartUpload() {
+        mView.setLoadingVisibility(true)
+        mView.setSaveEnabled(false)
+        mView.showUploadingMessage()
     }
 
     override fun handleCancelClicked(bg: Bitmap) {

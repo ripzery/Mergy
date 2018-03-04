@@ -1,6 +1,7 @@
 package me.ripzery.warpcan.ui.share
 
 import android.annotation.SuppressLint
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -16,6 +17,8 @@ import me.ripzery.warpcan.helpers.Base64Helper
 import me.ripzery.warpcan.network.DataProvider
 import me.ripzery.warpcan.network.Request
 import me.ripzery.warpcan.network.Response
+import me.ripzery.warpcan.ui.custom.IsetanDialog
+import me.ripzery.warpcan.ui.custom.RetryViewModel
 import me.ripzery.warpcan.ui.main.MainActivity
 import java.util.*
 
@@ -24,6 +27,7 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
     private lateinit var mImageUri: Uri
     private lateinit var mUsers: ArrayList<Response.User>
     private lateinit var mUploadResponse: Response.Upload
+    private val mRetryViewModel: RetryViewModel by lazy { ViewModelProviders.of(this).get(RetryViewModel::class.java) }
     private val mSharePresenter: ShareContract.Presenter by lazy { SharePresenter(this) }
     private var mSelectedUser: Response.User? = null
     private val mSuccessDialog by lazy { IsetanDialog() }
@@ -65,8 +69,23 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
             startActivity(intent)
         }
 
+        btnShare.setOnClickListener {
+            if (mSelectedUser != null) {
+                mSharePresenter.handleShare(mSelectedUser!!, mCurrentPhoto, mUploadResponse)
+            } else {
+                toast("Please select the user first")
+            }
+        }
+
+        mRetryViewModel.subscribeRequesting().observe(this, android.arch.lifecycle.Observer {
+            if (mSelectedUser != null) {
+                mSharePresenter.handleShare(mSelectedUser!!, mCurrentPhoto, mUploadResponse)
+            } else {
+                toast("PleasZEe select the user first")
+            }
+        })
+
         previewImage()
-        setupShareBtn()
     }
 
     private fun previewImage() {
@@ -82,25 +101,17 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
         changeBtnName(mSelectedUser!!.email)
     }
 
-    private fun setupShareBtn() {
-        btnShare.setOnClickListener {
-            if (mSelectedUser != null) {
-                mSharePresenter.handleShare(mSelectedUser!!, mCurrentPhoto, mUploadResponse)
-            } else {
-                toast("Please select the user first")
-            }
-        }
-    }
-
     override fun showShareSuccess(email: String) {
         toast("The image is sent to $email successfully.")
     }
 
-    override fun showShareFail(error: Throwable) {
+    override fun showShareFail(error: Throwable, request: Request.Retriable.SendEmail) {
+        val dialogRetry = IsetanDialog.newInstance(IsetanDialog.MODE_RETRY, request)
+        dialogRetry.show(supportFragmentManager, "retry")
         toast("Cannot sent an email. $error")
     }
 
-    override fun sendEmail(reqSendEmail: Request.SendEmail, onSuccess: (Response.SendEmail) -> Unit) {
+    override fun sendEmail(reqSendEmail: Request.Retriable.SendEmail, onSuccess: (Response.SendEmail) -> Unit) {
         DataProvider.sendEmail(reqSendEmail, {
             toast("Cannot sent an email. ${it.message}")
         }) {

@@ -17,11 +17,11 @@ interface IsetanEndpoints {
     fun retrievePhotos(): Observable<Response.Config>
 
     @POST("api/upload/media")
-    fun upload(@Body request: Request.Upload): Observable<Response.Upload>
+    fun upload(@Body request: Request.Retriable.Upload): Observable<Response.Upload>
 
     @POST("api/user/getrecord")
     fun retrieveUserInfos(@Body request: Request.RetrieveUsers): Observable<Response.RetrieveUsers>
 
     @POST("api/user/sendmail")
-    fun sendEmail(@Body request: Request.SendEmail): Observable<Response.SendEmail>
+    fun sendEmail(@Body request: Request.Retriable.SendEmail): Observable<Response.SendEmail>
 }

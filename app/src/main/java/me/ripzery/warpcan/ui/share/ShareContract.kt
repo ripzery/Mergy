@@ -14,13 +14,13 @@ import me.ripzery.warpcan.network.Response
 
 interface ShareContract {
     interface View {
-        fun sendEmail(reqSendEmail: Request.SendEmail, onSuccess: (Response.SendEmail) -> Unit)
+        fun sendEmail(reqSendEmail: Request.Retriable.SendEmail, onSuccess: (Response.SendEmail) -> Unit)
         fun encryptBase64(callback: (String) -> Unit)
         fun showLoading()
         fun hideLoading()
         fun showSuccessDialog()
         fun showShareSuccess(email: String)
-        fun showShareFail(error: Throwable)
+        fun showShareFail(error: Throwable, request: Request.Retriable.SendEmail)
         fun changeBtnName(name: String)
         fun showUsers(users: ArrayList<Response.User>)
     }
