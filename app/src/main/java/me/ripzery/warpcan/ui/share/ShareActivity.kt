@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
+import com.afollestad.materialdialogs.MaterialDialog
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_share.*
 import kotlinx.android.synthetic.main.layout_toolbar.*
@@ -22,15 +23,28 @@ import me.ripzery.warpcan.ui.custom.RetryViewModel
 import me.ripzery.warpcan.ui.main.MainActivity
 import java.util.*
 
+
 class ShareActivity : AppCompatActivity(), ShareContract.View {
     private lateinit var mCurrentPhoto: Response.Photo
     private lateinit var mImageUri: Uri
-    private lateinit var mUsers: ArrayList<Response.User>
     private lateinit var mUploadResponse: Response.Upload
     private val mRetryViewModel: RetryViewModel by lazy { ViewModelProviders.of(this).get(RetryViewModel::class.java) }
     private val mSharePresenter: ShareContract.Presenter by lazy { SharePresenter(this) }
     private var mSelectedUser: Response.User? = null
     private val mSuccessDialog by lazy { IsetanDialog() }
+    private var mUsers: ArrayList<Response.User> = arrayListOf()
+        set(value) {
+            when (value.size) {
+                0 -> {
+                    btnEmail.isEnabled = false
+                    btnEmail.text = "Empty Users"
+                }
+                else -> {
+                    btnEmail.isEnabled = true
+                    field = value
+                }
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,11 +68,25 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         mSharePresenter.fetchUsers()
 
-        spinUsers.setOnItemSelectedListener { view, position, id, item ->
-            if (mUsers.size > 0) {
-                mSelectedUser = mUsers[position]
-                changeBtnName(mSelectedUser!!.email)
-            }
+//        spinUsers.setOnItemSelectedListener { view, position, id, item ->
+//            if (mUsers.size > 0) {
+//                mSelectedUser = mUsers[position]
+//                changeBtnName(mSelectedUser!!.email)
+//            }
+//        }
+
+        btnEmail.setOnClickListener {
+            MaterialDialog.Builder(this)
+                    .title("Select your email")
+                    .items(mUsers.map { it.email })
+                    .itemsCallbackSingleChoice(0, { dialog, view, which, text ->
+                        btnEmail.text = text
+                        mSelectedUser = mUsers.findLast { it.email == text }
+                        dialog.dismiss()
+                        true
+                    })
+                    .positiveText("OK")
+                    .show()
         }
 
         btnBack.setOnClickListener { finish() }
@@ -81,7 +109,7 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
             if (mSelectedUser != null) {
                 mSharePresenter.handleShare(mSelectedUser!!, mCurrentPhoto, mUploadResponse)
             } else {
-                toast("PleasZEe select the user first")
+                toast("Please select the user first")
             }
         })
 
@@ -96,9 +124,9 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
 
     override fun showUsers(users: ArrayList<Response.User>) {
         mUsers = users
-        spinUsers.setItems(mUsers.map { it.email })
-        mSelectedUser = mUsers[0]
-        changeBtnName(mSelectedUser!!.email)
+//        spinUsers.setItems(mUsers.map { it.email })
+//        mSelectedUser = mUsers[0]
+//        changeBtnName(mSelectedUser!!.email)
     }
 
     override fun showShareSuccess(email: String) {
@@ -130,7 +158,7 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
         btnShare.alpha = 0.5f
         ivShare.alpha = 0.5f
         btnShare.isEnabled = false
-        spinUsers.isEnabled = false
+        btnEmail.isEnabled = false
         ivShare.isEnabled = false
         progressBar.visibility = View.VISIBLE
     }
@@ -139,7 +167,7 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
         btnShare.alpha = 1.0f
         ivShare.alpha = 1.0f
         btnShare.isEnabled = true
-        spinUsers.isEnabled = true
+        btnEmail.isEnabled = true
         ivShare.isEnabled = false
         progressBar.visibility = View.GONE
     }
