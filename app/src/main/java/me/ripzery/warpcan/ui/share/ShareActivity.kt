@@ -1,6 +1,7 @@
 package me.ripzery.warpcan.ui.share
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -15,6 +16,7 @@ import me.ripzery.warpcan.helpers.Base64Helper
 import me.ripzery.warpcan.network.DataProvider
 import me.ripzery.warpcan.network.Request
 import me.ripzery.warpcan.network.Response
+import me.ripzery.warpcan.ui.main.MainActivity
 import java.util.*
 
 class ShareActivity : AppCompatActivity(), ShareContract.View {
@@ -53,6 +55,14 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
                 mSelectedUser = mUsers[position]
                 changeBtnName(mSelectedUser!!.email)
             }
+        }
+
+        btnBack.setOnClickListener { finish() }
+        btnTryAgain.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+            startActivity(intent)
         }
 
         previewImage()

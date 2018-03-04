@@ -2,4 +2,5 @@
 <resources>
     <dimen name="mergePreviewMarginTop">48dp</dimen>
     <dimen name="mergePreviewWidth">1000dp</dimen>
+    <dimen name="shareHeight">140dp</dimen>
 </resources>

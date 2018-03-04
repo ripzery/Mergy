@@ -6,4 +6,5 @@
     <dimen name="textHeight">18sp</dimen>
     <dimen name="mergePreviewMarginTop">0dp</dimen>
     <dimen name="mergePreviewWidth">@dimen/match_parent</dimen>
+    <dimen name="shareHeight">180dp</dimen>
 </resources>

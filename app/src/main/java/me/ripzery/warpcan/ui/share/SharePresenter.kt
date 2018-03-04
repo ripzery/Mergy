@@ -35,7 +35,7 @@ class SharePresenter(private val mView: ShareContract.View) : ShareContract.Pres
     override fun fetchUsers() {
         val date = Date()
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
-        val request = Request.RetrieveUsers("2018-01-29")
+        val request = Request.RetrieveUsers(dateFormat.format(date))
 
         DataProvider.retrieveUsers(request) {
             mView.showUsers(it.message)
