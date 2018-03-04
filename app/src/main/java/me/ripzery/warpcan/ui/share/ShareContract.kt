@@ -19,12 +19,14 @@ interface ShareContract {
         fun showLoading()
         fun hideLoading()
         fun showSuccessDialog()
+        fun showShareSuccess(email: String)
+        fun showShareFail(error: Throwable)
         fun changeBtnName(name: String)
         fun showUsers(users: ArrayList<Response.User>)
     }
 
     interface Presenter {
-        fun handleShare(user: Response.User, photo: Response.Photo, imageURL: String)
+        fun handleShare(user: Response.User, photo: Response.Photo, uploadResponse: Response.Upload)
         fun fetchUsers()
     }
 }

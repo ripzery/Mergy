@@ -6,6 +6,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import me.ripzery.warpcan.network.DataProvider
 import me.ripzery.warpcan.network.Request
+import me.ripzery.warpcan.network.Response
 import org.jetbrains.anko.coroutines.experimental.bg
 
 
@@ -17,7 +18,7 @@ import org.jetbrains.anko.coroutines.experimental.bg
  */
 
 class MergePresenter(private val mView: MergeContract.View) : MergeContract.Presenter {
-    override fun handleSaveClicked(bg: Bitmap, sticker: Bitmap) {
+    override fun handleSaveClicked(bg: Bitmap, sticker: Bitmap, photo: Response.Photo) {
         var mUri: Uri? = null
         with(mView) {
             async(UI) {
@@ -37,13 +38,14 @@ class MergePresenter(private val mView: MergeContract.View) : MergeContract.Pres
                 setPhotoAlpha(1.0f)
                 mView.showUploadingMessage()
                 mView.encryptBase64 {
-                    val reqUpload = Request.Upload(it, 1)
+                    val reqUpload = Request.Upload(it, 1, photo.imageType)
                     DataProvider.upload(reqUpload, {
+                        setLoadingVisibility(false)
                         mView.showSaveImageFailed("Cannot uploaded an image to the server. $it")
                     }) {
                         setLoadingVisibility(false)
                         mView.showUploadingSuccess()
-                        mView.showSaveImageSuccess(it.message.imageUrl)
+                        mView.showSaveImageSuccess(it)
                     }
                 }
             }

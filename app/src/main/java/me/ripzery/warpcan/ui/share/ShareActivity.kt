@@ -23,7 +23,7 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
     private lateinit var mCurrentPhoto: Response.Photo
     private lateinit var mImageUri: Uri
     private lateinit var mUsers: ArrayList<Response.User>
-    private lateinit var mImageURL: String
+    private lateinit var mUploadResponse: Response.Upload
     private val mSharePresenter: ShareContract.Presenter by lazy { SharePresenter(this) }
     private var mSelectedUser: Response.User? = null
     private val mSuccessDialog by lazy { IsetanDialog() }
@@ -33,7 +33,7 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
         setContentView(R.layout.activity_share)
         mImageUri = Uri.parse(intent.getStringExtra("result"))
         mCurrentPhoto = intent.getParcelableExtra("photo")
-        mImageURL = intent.getStringExtra("imageURL")
+        mUploadResponse = intent.getParcelableExtra("uploadResponse")
         initInstance()
     }
 
@@ -85,16 +85,24 @@ class ShareActivity : AppCompatActivity(), ShareContract.View {
     private fun setupShareBtn() {
         btnShare.setOnClickListener {
             if (mSelectedUser != null) {
-                mSharePresenter.handleShare(mSelectedUser!!, mCurrentPhoto, mImageURL)
+                mSharePresenter.handleShare(mSelectedUser!!, mCurrentPhoto, mUploadResponse)
             } else {
                 toast("Please select the user first")
             }
         }
     }
 
+    override fun showShareSuccess(email: String) {
+        toast("The image is sent to $email successfully.")
+    }
+
+    override fun showShareFail(error: Throwable) {
+        toast("Cannot sent an email. $error")
+    }
+
     override fun sendEmail(reqSendEmail: Request.SendEmail, onSuccess: (Response.SendEmail) -> Unit) {
         DataProvider.sendEmail(reqSendEmail, {
-            toast("Cannot sent an email. $it")
+            toast("Cannot sent an email. ${it.message}")
         }) {
             toast("The image is sent to ${reqSendEmail.email} successfully.")
             onSuccess(it)

@@ -15,19 +15,23 @@ import java.util.*
  */
 
 class SharePresenter(private val mView: ShareContract.View) : ShareContract.Presenter {
-    override fun handleShare(user: Response.User, photo: Response.Photo, imageURL: String) {
+    override fun handleShare(user: Response.User, photo: Response.Photo, uploadResponse: Response.Upload) {
         val reqSendEmail = Request.SendEmail(
                 user.email,
                 user.userProfileId,
-                imageURL,
-                user.firstName,
-                user.lastName,
+                uploadResponse.message.imageUrl,
+                if (user.firstName == "") "-" else user.firstName,
+                if (user.lastName == "") "-" else user.lastName,
                 photo.seasonId,
-                photo.imageId
+                uploadResponse.message.log.photoId
         )
         mView.showLoading()
-        mView.sendEmail(reqSendEmail) {
+        DataProvider.sendEmail(reqSendEmail, {
             mView.hideLoading()
+            mView.showShareFail(it)
+        }) {
+            mView.hideLoading()
+            mView.showShareSuccess(reqSendEmail.email)
             mView.showSuccessDialog()
         }
     }

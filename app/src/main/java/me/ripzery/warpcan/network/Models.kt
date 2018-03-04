@@ -16,7 +16,8 @@ import java.util.*
 object Request {
     data class Upload(
             @SerializedName("base_64_image") val base64Image: String,
-            @SerializedName("season_id") val seasonId: Int
+            @SerializedName("season_id") val seasonId: Int,
+            @SerializedName("image_type_id") val imageTypeId: Int
     )
 
     data class RetrieveUsers(val date: String)
@@ -50,7 +51,10 @@ object Response {
     data class Upload(val errors: Boolean, val message: ImageUrl) : Parcelable
 
     @Parcelize
-    data class ImageUrl(@SerializedName("image_url") val imageUrl: String) : Parcelable
+    data class UploadLog(@SerializedName("photo_id") val photoId: Int, val msg: String) : Parcelable
+
+    @Parcelize
+    data class ImageUrl(@SerializedName("image_url") val imageUrl: String, val log: UploadLog) : Parcelable
 
     @Parcelize
     data class RetrieveUsers(val errors: Boolean, val message: ArrayList<User>) : Parcelable

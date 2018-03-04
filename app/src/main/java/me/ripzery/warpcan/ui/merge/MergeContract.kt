@@ -2,6 +2,7 @@ package me.ripzery.warpcan.ui.merge
 
 import android.graphics.Bitmap
 import android.net.Uri
+import me.ripzery.warpcan.network.Response
 
 
 /**
@@ -27,7 +28,7 @@ interface MergeContract {
         fun setCancelEnabled(enable: Boolean)
         fun setShareEnabled(enable: Boolean)
         fun setMergedImageUri(uri: Uri)
-        fun showSaveImageSuccess(imageURL: String)
+        fun showSaveImageSuccess(response: Response.Upload)
         fun showSaveImageFailed(msg: String)
         fun showUploadingMessage()
         fun showUploadingSuccess()
@@ -35,7 +36,7 @@ interface MergeContract {
     }
 
     interface Presenter {
-        fun handleSaveClicked(bg: Bitmap, sticker: Bitmap)
+        fun handleSaveClicked(bg: Bitmap, sticker: Bitmap, photo: Response.Photo)
         fun handleCancelClicked(bg: Bitmap)
         fun handleBackgroundChanged(bg: Bitmap)
     }

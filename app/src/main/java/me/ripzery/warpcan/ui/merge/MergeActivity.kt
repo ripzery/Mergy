@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.layout_merge_preview.*
 import me.ripzery.bitmapkeeper.BitmapKeeper
 import me.ripzery.bitmapmerger.BitmapMerger
 import me.ripzery.warpcan.R
-import me.ripzery.warpcan.extensions.logd
 import me.ripzery.warpcan.extensions.toast
 import me.ripzery.warpcan.helpers.Base64Helper
 import me.ripzery.warpcan.helpers.PositionManager
@@ -70,7 +69,7 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
         observeBackgroundChanged()
 
         btnSave.setOnClickListener {
-            mMergePresenter.handleSaveClicked(mBitmapBG, mSticker)
+            mMergePresenter.handleSaveClicked(mBitmapBG, mSticker, mCurrentPhoto!!)
         }
 
         btnBack.setOnClickListener { finish() }
@@ -89,7 +88,6 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             android.R.id.home -> finish()
-            R.id.menu_save -> mMergePresenter.handleSaveClicked(mBitmapBG, mSticker)
             R.id.menu_cancel -> mMergePresenter.handleCancelClicked(mBitmapBG)
             R.id.menu_share -> {
                 if (mCurrentMergedImage != null && mCurrentPhoto != null) {
@@ -101,11 +99,11 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
         return true
     }
 
-    private fun startShareActivity(imageURL: String) {
+    private fun startShareActivity(responseUpload: Response.Upload) {
         val intent = Intent(this, ShareActivity::class.java)
         intent.putExtra("result", mCurrentMergedImage!!.toString())
         intent.putExtra("photo", mCurrentPhoto)
-        intent.putExtra("imageURL", imageURL)
+        intent.putExtra("uploadResponse", responseUpload)
         startActivity(intent)
     }
 
@@ -179,11 +177,11 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
         toast("The image has been uploaded successfully!")
     }
 
-    override fun showSaveImageSuccess(imageURL: String) {
+    override fun showSaveImageSuccess(response: Response.Upload) {
         if (mCurrentMergedImage != null && mCurrentPhoto != null) {
             toast("Saved image successfully.")
             mMergePresenter.handleCancelClicked(mBitmapBG)
-            startShareActivity(imageURL)
+            startShareActivity(response)
         } else {
             toast("Please select the background image first.")
         }
