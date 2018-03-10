@@ -11,6 +11,11 @@ import me.ripzery.warpcan.ui.main.MainActivity
 
 class AgreementActivity : AppCompatActivity() {
 
+    companion object {
+        const val LANG_TH = "th"
+        const val LANG_EN = "en"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agreement)
@@ -24,6 +29,25 @@ class AgreementActivity : AppCompatActivity() {
         btnCancel.setOnClickListener {
             toast("Please press \"Agree\" to use the app")
             finish()
+        }
+
+        btnChangeLanguage.setOnClickListener {
+            changeLanguage(btnChangeLanguage.text.toString().toLowerCase())
+        }
+    }
+
+    private fun changeLanguage(lang: String) {
+        when (lang) {
+            LANG_TH -> {
+                btnChangeLanguage.text = LANG_EN.toUpperCase()
+                tvAgreement.text = getString(R.string.agreement_th)
+                tvAgreement.scrollTo(0, 0)
+            }
+            LANG_EN -> {
+                btnChangeLanguage.text = LANG_TH.toUpperCase()
+                tvAgreement.text = getString(R.string.agreement_en)
+                tvAgreement.scrollTo(0, 0)
+            }
         }
     }
 }
