@@ -31,4 +31,8 @@
     <style name="MergePreview">
         <item name="android:layout_gravity">center_horizontal</item>
     </style>
+
+    <style name="ShareImagePreview">
+        <item name="android:layout_width">@dimen/mergePreviewWidth</item>
+    </style>
 </resources>

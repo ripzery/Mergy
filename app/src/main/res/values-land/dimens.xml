@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="mergePreviewMarginTop">48dp</dimen>
+    <dimen name="mergeShareMarginTop">64dp</dimen>
     <dimen name="mergePreviewWidth">800dp</dimen>
     <dimen name="backgroundHeight">160dp</dimen>
     <dimen name="shareHeight">140dp</dimen>

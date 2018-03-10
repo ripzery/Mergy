@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
@@ -49,18 +50,23 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
 
     companion object {
         const val CURRENT_PHOTO = "CURRENT_PHOTO"
+        const val CURRENT_BITMAP = "CURRENT_BITMAP"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_merge)
+        mBitmapBG = BitmapFactory.decodeResource(resources, R.drawable.default_background)
+        setBackground(mBitmapBG)
+        savedInstanceState?.let {
+            mBitmapBG = savedInstanceState.getParcelable(CURRENT_BITMAP)
+            setBackground(mBitmapBG)
+        }
         initInstance()
     }
 
     private fun initInstance() {
         /* Initialize background and sticker images */
-        mBitmapBG = BitmapFactory.decodeResource(resources, R.drawable.default_background)
-        setBackground(mBitmapBG)
         scalableLayout.setImage(mSticker)
 
         /* Initialize gallery layout */
@@ -76,7 +82,7 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
             if (mCurrentPhoto != null) {
                 mMergePresenter.handleSaveClicked(mBitmapBG, mSticker, mCurrentPhoto!!)
             } else {
-                toast("Please select the photo first!")
+                toast("Please select the ")
             }
         }
 
@@ -95,6 +101,11 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
         mGalleryViewModel.subscribePhoto().observe(this, Observer {
             mCurrentPhoto = it
         })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.putParcelable(CURRENT_BITMAP, mBitmapBG)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -207,7 +218,7 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
 
     override fun getContainer(): View = container
 
-    override fun getImageDrawable(): Drawable = ivPhoto.drawable
+    override fun getImageDrawable(): Drawable = BitmapDrawable(resources, mBitmapBG)
 
     override fun getStickerLayout(): ScalableLayout = scalableLayout
 }

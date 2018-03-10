@@ -27,7 +27,7 @@ object ApiService {
 
     private fun create(): IsetanEndpoints {
         val interceptor = HttpLoggingInterceptor()
-        interceptor.level = HttpLoggingInterceptor.Level.BODY
+        interceptor.level = HttpLoggingInterceptor.Level.BASIC
 
         val client = OkHttpClient.Builder()
 //                .addInterceptor {

@@ -2,6 +2,7 @@ package me.ripzery.warpcan.ui.merge
 
 import android.graphics.Bitmap
 import android.net.Uri
+import android.util.Log
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import me.ripzery.warpcan.network.DataProvider
@@ -28,12 +29,22 @@ class MergePresenter(private val mView: MergeContract.View) : MergeContract.Pres
                 setLoadingVisibility(true)
                 setPhotoAlpha(0.7f)
                 val bgTask = bg {
+                    Log.d("test", "test 1")
                     val newBitmap = merge(bg, sticker)
+                    Log.d("test", "test 2")
                     mUri = saveToDevice(newBitmap)
+                    Log.d("test", "test 3")
                     setMergedImageUri(mUri!!)
+                    Log.d("test", "test ")
                     newBitmap
                 }
-                setBackground(bgTask.await())
+                val result = try {
+                    bgTask.await()
+                } catch (e: IllegalStateException) {
+                    e.printStackTrace()
+                    throw e
+                }
+                setBackground(result)
                 setScalableViewVisibility(false)
                 setSaveEnabled(true)
                 setPhotoAlpha(1.0f)
