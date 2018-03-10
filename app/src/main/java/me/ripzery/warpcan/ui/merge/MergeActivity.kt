@@ -48,20 +48,11 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
     private lateinit var mGalleryFragment: GalleryFragment
     private lateinit var mBitmapBG: Bitmap
 
-    companion object {
-        const val CURRENT_PHOTO = "CURRENT_PHOTO"
-        const val CURRENT_BITMAP = "CURRENT_BITMAP"
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_merge)
         mBitmapBG = BitmapFactory.decodeResource(resources, R.drawable.default_background)
         setBackground(mBitmapBG)
-        savedInstanceState?.let {
-            mBitmapBG = savedInstanceState.getParcelable(CURRENT_BITMAP)
-            setBackground(mBitmapBG)
-        }
         initInstance()
     }
 
@@ -101,11 +92,6 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
         mGalleryViewModel.subscribePhoto().observe(this, Observer {
             mCurrentPhoto = it
         })
-    }
-
-    override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.putParcelable(CURRENT_BITMAP, mBitmapBG)
-        super.onSaveInstanceState(outState)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

@@ -82,6 +82,7 @@ class IsetanDialog : DialogFragment() {
                 }
             }
             MODE_SEND_EMAIL -> {
+
                 btnConfirm.setOnClickListener {
                     dismiss()
                 }
