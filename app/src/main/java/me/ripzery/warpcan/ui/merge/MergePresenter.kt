@@ -29,13 +29,9 @@ class MergePresenter(private val mView: MergeContract.View) : MergeContract.Pres
                 setLoadingVisibility(true)
                 setPhotoAlpha(0.7f)
                 val bgTask = bg {
-                    Log.d("test", "test 1")
                     val newBitmap = merge(bg, sticker)
-                    Log.d("test", "test 2")
                     mUri = saveToDevice(newBitmap)
-                    Log.d("test", "test 3")
                     setMergedImageUri(mUri!!)
-                    Log.d("test", "test ")
                     newBitmap
                 }
                 val result = try {
