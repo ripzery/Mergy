@@ -50,7 +50,7 @@ class MergePresenter(private val mView: MergeContract.View) : MergeContract.Pres
                 setPhotoAlpha(1.0f)
                 showUploadingMessage()
                 encryptBase64 {
-                    val reqUpload = Request.Retriable.Upload(it, 1, photo.imageType)
+                    val reqUpload = Request.Retriable.Upload(it, 1, photo.imageType, photo.imageId)
                     DataProvider.upload(reqUpload, {
                         handleRequestFail(reqUpload)
                     }) {

@@ -19,7 +19,8 @@ object Request {
         data class Upload(
                 @SerializedName("base_64_image") val base64Image: String,
                 @SerializedName("season_id") val seasonId: Int,
-                @SerializedName("image_type_id") val imageTypeId: Int
+                @SerializedName("image_type_id") val imageTypeId: Int,
+                @SerializedName("bg_image_id") val bgImageId: Int
         ) : Retriable()
 
         @Parcelize
