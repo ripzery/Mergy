@@ -81,7 +81,7 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
         }
 
         btnReset.setOnClickListener {
-            scalableLayout.setPosition(firstPosition)
+            scalableLayout.resetPosition(firstPosition)
         }
 
         btnBack.setOnClickListener { finish() }

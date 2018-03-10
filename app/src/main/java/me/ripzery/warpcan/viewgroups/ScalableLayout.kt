@@ -101,9 +101,12 @@ class ScalableLayout constructor(
         imageView.setImageBitmap(bitmap)
     }
 
-    fun setPosition(position: Position){
+    fun resetPosition(position: Position) {
+        mScaleFactor = 1f
         this.x = position.dicutFrame.left.toFloat()
         this.y = position.dicutFrame.top.toFloat()
+        scaleX = mScaleFactor
+        scaleY = mScaleFactor
     }
 
     private fun View.halfWidth() = (this.left + this.right) / 2.0f
@@ -113,6 +116,7 @@ class ScalableLayout constructor(
         scaleX = scale
         scaleY = scale
     }
+
     private fun MotionEvent.diffX(x: Float) = (rawX - x).toDouble()
     private fun MotionEvent.diffY(y: Float) = (rawY - y).toDouble()
 
