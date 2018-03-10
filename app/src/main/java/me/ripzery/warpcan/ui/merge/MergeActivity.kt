@@ -73,7 +73,11 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
         observeBackgroundChanged()
 
         btnSave.setOnClickListener {
-            mMergePresenter.handleSaveClicked(mBitmapBG, mSticker, mCurrentPhoto!!)
+            if (mCurrentPhoto != null) {
+                mMergePresenter.handleSaveClicked(mBitmapBG, mSticker, mCurrentPhoto!!)
+            } else {
+                toast("Please select the photo first!")
+            }
         }
 
         btnBack.setOnClickListener { finish() }

@@ -15,13 +15,23 @@ import kotlinx.android.synthetic.main.viewgroup_layout_background.view.*
 import me.ripzery.warpcan.R
 import me.ripzery.warpcan.extensions.logd
 import me.ripzery.warpcan.network.Response
+import java.util.*
 
 class GalleryFragment : Fragment() {
     private val mGalleryViewModel: GalleryViewModel by lazy { ViewModelProviders.of(activity!!).get(GalleryViewModel::class.java) }
     private lateinit var mAdapter: GalleryRecyclerAdapter
     private var mMode: Int = GalleryFragment.LANDSCAPE_MODE
     private var mFirstId: Int = 0
-    private var mCurrentList: ArrayList<Response.Photo> = arrayListOf()
+    private var mCurrentList: ArrayList<Response.Photo> = arrayListOf(
+            Response.Photo(1, 1, "landscape", 1, Date(), "empty"),
+            Response.Photo(2, 1, "landscape", 1, Date(), "empty"),
+            Response.Photo(3, 1, "landscape", 1, Date(), "empty"),
+            Response.Photo(4, 1, "landscape", 1, Date(), "empty"),
+            Response.Photo(5, 1, "landscape", 1, Date(), "empty"),
+            Response.Photo(6, 1, "landscape", 1, Date(), "empty"),
+            Response.Photo(7, 2, "panorama", 2, Date(), "empty"),
+            Response.Photo(8, 2, "panorama", 2, Date(), "empty")
+    )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -29,16 +39,19 @@ class GalleryFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        mAdapter = GalleryRecyclerAdapter(arrayListOf())
+        mAdapter = GalleryRecyclerAdapter(ArrayList(mCurrentList))
         recyclerView.adapter = mAdapter
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
         mGalleryViewModel.retrieveGallery().observe(this, Observer { photoList ->
             if (photoList != null) {
                 val filteredTypePhotoList = ArrayList(photoList.filter { it.imageType == mMode })
                 if (filteredTypePhotoList[0] != null) {
                     mFirstId = filteredTypePhotoList[0].imageId
                 }
-                mCurrentList.addAll(photoList)
+                mCurrentList.clear()
+                mCurrentList.addAll(ArrayList(photoList))
+                mAdapter.clearPhotos()
                 mAdapter.addPhotos(filteredTypePhotoList)
             }
         })
@@ -84,7 +97,7 @@ class GalleryFragment : Fragment() {
         override fun getItemCount() = mBitmapList.size
 
         fun addPhotos(photoList: ArrayList<Response.Photo>) {
-            mBitmapList.addAll(photoList)
+            mBitmapList.addAll(ArrayList(photoList))
             notifyItemRangeInserted(0, photoList.size)
         }
 

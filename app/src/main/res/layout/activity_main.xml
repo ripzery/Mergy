@@ -23,8 +23,9 @@
         <FrameLayout
             android:id="@+id/layoutEmptyImage"
             android:layout_width="match_parent"
-            android:layout_height="450dp"
+            android:layout_height="400dp"
             android:layout_gravity="center"
+            android:layout_marginTop="36dp"
             android:background="@color/colorBackgroundImage">
 
             <TextView
@@ -43,9 +44,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="36dp"
             android:adjustViewBounds="true"
             android:background="@color/colorBackgroundImage"
-            android:maxHeight="450dp"
+            android:maxHeight="400dp"
             android:scaleType="fitEnd" />
 
     </FrameLayout>
@@ -72,8 +74,8 @@
             android:background="@drawable/btn_next_selector"
             android:enabled="false"
             android:text="Next"
-            android:textSize="20sp"
-            android:textColor="@color/colorGrey" />
+            android:textColor="@color/colorGrey"
+            android:textSize="20sp" />
 
     </LinearLayout>
 </LinearLayout>

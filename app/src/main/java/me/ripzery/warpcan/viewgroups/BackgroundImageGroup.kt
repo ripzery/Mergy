@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
@@ -58,6 +59,10 @@ class BackgroundImageGroup constructor(
     }
 
     fun setImageBackground(photo: Response.Photo) {
+        if (photo.imageUrl == "empty") {
+            mRootLayout.ivBackground.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.image_placeholder))
+            return
+        }
         mPhoto = photo
         val width = resources.getDimension(R.dimen.backgroundWidth)
         val height = resources.getDimension(R.dimen.backgroundHeight)
