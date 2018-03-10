@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_merge.*
 import kotlinx.android.synthetic.main.layout_merge_preview.*
 import me.ripzery.bitmapkeeper.BitmapKeeper
 import me.ripzery.bitmapmerger.BitmapMerger
+import me.ripzery.bitmapmerger.Position
 import me.ripzery.warpcan.R
 import me.ripzery.warpcan.extensions.toast
 import me.ripzery.warpcan.helpers.Base64Helper
@@ -45,6 +46,7 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
     private val mMergePresenter: MergeContract.Presenter by lazy { MergePresenter(this) }
     private var mCurrentMergedImage: Uri? = null
     private var mCurrentPhoto: Response.Photo? = null
+    private lateinit var firstPosition: Position
     private lateinit var mGalleryFragment: GalleryFragment
     private lateinit var mBitmapBG: Bitmap
 
@@ -59,6 +61,7 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
     private fun initInstance() {
         /* Initialize background and sticker images */
         scalableLayout.setImage(mSticker)
+        firstPosition = mPosition
 
         /* Initialize gallery layout */
         mGalleryFragment = GalleryFragment.newInstance()
@@ -75,6 +78,10 @@ class MergeActivity : AppCompatActivity(), PositionManagerInterface.View, MergeC
             } else {
                 toast("Please select the ")
             }
+        }
+
+        btnReset.setOnClickListener {
+            scalableLayout.setPosition(firstPosition)
         }
 
         btnBack.setOnClickListener { finish() }

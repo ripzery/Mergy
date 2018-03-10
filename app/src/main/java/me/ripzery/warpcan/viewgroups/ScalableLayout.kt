@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
+import me.ripzery.bitmapmerger.Position
 import me.ripzery.warpcan.R
 
 
@@ -98,6 +99,11 @@ class ScalableLayout constructor(
 
     fun setImage(bitmap: Bitmap) {
         imageView.setImageBitmap(bitmap)
+    }
+
+    fun setPosition(position: Position){
+        this.x = position.dicutFrame.left.toFloat()
+        this.y = position.dicutFrame.top.toFloat()
     }
 
     private fun View.halfWidth() = (this.left + this.right) / 2.0f
