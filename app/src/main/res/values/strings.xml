@@ -12,14 +12,14 @@
 
         THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     </string>
-    <string name="isetan_dialog_text_title">ขอบคุณที่ร่วมสนุก</string>
-    <string name="isetan_dialog_text_description">ชมภาพของคุณได้ที่อีเมล์ของคุณ</string>
-    <string name="isetan_dialog_text_confirm">เสร็จสิ้น</string>
+    <string name="isetan_dialog_text_title">Thank you for joining Warp Can.</string>
+    <string name="isetan_dialog_text_description">Your photo will be sent to your email.</string>
+    <string name="isetan_dialog_text_confirm">Done</string>
 
-    <string name="isetan_retry_dialog_upload_text_title">อัพโหลดผิดพลาด</string>
-    <string name="isetan_retry_dialog_sendmail_text_title">ส่งอีเมล์ผิดพลาด</string>
-    <string name="isetan_retry_dialog_text_description">กรุณาลองใหม่อีกครั้ง</string>
-    <string name="isetan_retry_dialog_text_confirm">ลองใหม่</string>
+    <string name="isetan_retry_dialog_upload_text_title">Uploading failed</string>
+    <string name="isetan_retry_dialog_sendmail_text_title">Sending an email failed</string>
+    <string name="isetan_retry_dialog_text_description">Please try again</string>
+    <string name="isetan_retry_dialog_text_confirm">Retry</string>
 
     <string name="skip">Skip</string>
     <string name="start_over">Start Over</string>
