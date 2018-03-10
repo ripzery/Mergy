@@ -1,21 +1,59 @@
 <resources>
-    <string name="app_name">WarpCan</string>
-    <string name="version">v1.0.0</string>
+    <string name="app_name">WARP CAN</string>
+    <string name="version">v10</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="share">Share</string>
     <string name="agreement_en">
-        Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+        Isetan built this WARP CAN app as photo campaign facilitator for WARP CAN services provided by Isetan at no cost and is intended for use as is. \n\n
+ 
+This page is used to inform application users our policies with collection, use, and disclosure of Personal Information of those who decided to use our Service. \n\n
+ 
+If you choose to use our Service, then you agree to collection and use of information according to our policies. The Personal Information that we collect is used for providing and improving the Service. We will not use or share your information with anyone except those described in this Privacy Policy.\n\n
+The terms used in this Privacy Policy have the same meanings as in our Terms and Conditions, which is accessible at WARP CAN unless otherwise defined in the Privacy Policy.\n
+Information Collection and Use\n\n
+ 
+To provide better experience, while using our Service, we may require you to provide us certain personally identifiable information. The information that we request will be retained by us and used as described in this privacy policy.\n\n
+ 
+The app does use third party services that may collect information used to identify you.\n\n
+ 
+Service Providers\n\n
+We may employ third-party companies and individuals for following reasons:\n
+• To facilitate our Service;\n
+• To provide the Service on our behalf;\n
+• To perform Service-related services; or\n
+• To assist us in analyzing how our Service is used.\n\n
+ 
+We would like to inform users of this Service that these third parties have access to your Personal Information. The reason is to perform tasks assigned to them on our behalf. However, they are obligated not to disclose or use the information for any other purposes.
 
-        The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     </string>
     <string name="agreement_th">
-        ไก่จิกเด็กตาย เด็กตายบนปากโอ่ง
+        อิเซตันสร้างแอพพลิเคชั่นชื่อ “WARP CAN” เพื่อใช้สำหรับงานแคมเปญที่จัดสร้างโดยอิเซตัน โดยไม่มีค่าใช้จ่ายใดๆในการร่วมแคมเปญทั้งสิ้น\n\n
+
+ข้อความบนหน้านี้มีเพื่อสื่อสารผู้ใช้แอพพลิเคชั่น ได้ทำความเข้าใจถึงนโยบาย และความปลอดภัยของข้อมูลส่วนตัวของผู้ใช้ที่ตัดสินใจเข้าร่วมกับแคมเปญ “WARP CAN”\n\n
+
+หากท่านต้องการเข้าร่วมกับแคมเปญนี้ของทางอิเซตัน ถือว่าท่านได้ยินยอมที่จะให้แอพพลิเคชั่นมีการจัดเก็บข้อมูลส่วนตัวของท่านซึ่งเป็นไปตามนโยบายความปลอดภัยทางด้านข้อมูลของอิเซตัน เพื่อใช้ในการปรับปรุงและพัฒนางานบริการของเราต่อไป ทั้งนี้ ทางอิเซตันจะไม่แชร์หรือส่งต่อข้อมูลของท่าน\n\n
+
+ข้อระเบียบการจัดเก็บและใช้ข้อมูลส่วนตัวของผู้ร่วมสนุก\n\n
+
+เพื่อประสบการณ์ที่น่าประทับใจยิ่งขึ้น อิเซตันขอจัดเก็บข้อมูลส่วนตัวของท่านเพื่อเลือกสิ่งที่เหมาะสมที่สุดกับผู้ใช้บริการ โดยข้อมูลดังกล่าวจะไม่ถูกเผยแพร่\n
+
+แอพพลิเคชั่น “WARP CAN” ได้มีการใช้บริการกับบริษัทเครือข่ายเพื่อสร้างแคมเปญนี้ให้สมบูรณ์ยิ่งขึ้น\n\n
+
+บริษัทเครือข่ายผู้ร่วมให้บริการได้ยินยอมที่จะทำตามข้อตกลง ดังนี้\n\n
+
+-เพื่ออำนวยความสะดวกในการให้บริการ\n
+
+-เพื่อจัดหาบริการในนามของอิเซตัน\n
+
+-เพื่อทำให้บริการสำเร็จลุล่วง หรือ\n
+
+-เพื่อมอบความช่วยเหลือให้ทางอิเซตันพัฒนาหรือปรับปรุงบริการ\n\n
+
+ทางอิเซตันมีความต้องการที่จะแจ้งให้ผู้ใช้แอพพลิเคชั่นทราบว่า เครือข่ายผู้ร่วมให้บริการดังกล่าวข้างต้นสามารถเข้าถึงข้อมูลส่วนตัวของท่าน แต่จะไม่มีสิทธิ์ในการเผยแพร่หรือใช้ประโยชน์จากข้อมูลดังกล่าว\n
     </string>
-    <string name="isetan_dialog_text_title">Thank you for joining Warp Can.</string>
+    <string name="isetan_dialog_text_title">Thank you for joining WARP CAN.</string>
     <string name="isetan_dialog_text_description">Your photo will be sent to your email.</string>
     <string name="isetan_dialog_text_confirm">Done</string>
 

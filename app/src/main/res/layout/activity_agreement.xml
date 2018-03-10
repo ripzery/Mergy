@@ -16,13 +16,14 @@
 
         <TextView
             android:id="@+id/tvAgreement"
-            android:layout_width="640dp"
+            android:layout_width="@dimen/agreementWidth"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@android:color/white"
             android:fontFamily="@font/supermarket"
-            android:maxLines="8"
+            android:maxLines="10"
             android:padding="16dp"
+            android:lineSpacingExtra="8dp"
             android:scrollbars="vertical"
             android:text="@string/agreement_en"
             android:textColor="@android:color/black"

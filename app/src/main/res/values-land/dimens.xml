@@ -5,4 +5,5 @@
     <dimen name="mergePreviewWidth">800dp</dimen>
     <dimen name="backgroundHeight">160dp</dimen>
     <dimen name="shareHeight">140dp</dimen>
+    <dimen name="agreementWidth">800dp</dimen>
 </resources>
