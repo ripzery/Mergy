@@ -64,13 +64,13 @@ class BackgroundImageGroup constructor(
             return
         }
         mPhoto = photo
-        val width = resources.getDimension(R.dimen.backgroundWidth)
-        val height = resources.getDimension(R.dimen.backgroundHeight)
+        val width = 1920
+        val height = 1080
         Glide.with(context)
                 .applyDefaultRequestOptions(GlideHelpers.defaultRequestOptions())
                 .asBitmap()
                 .load(photo.imageUrl)
-                .into(object : SimpleTarget<Bitmap>(width.toInt(), height.toInt()) {
+                .into(object : SimpleTarget<Bitmap>(width, height) {
                     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                         progressBar.visibility = View.GONE
                         mBackground = resource

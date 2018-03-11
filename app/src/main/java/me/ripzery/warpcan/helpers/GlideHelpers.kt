@@ -1,6 +1,7 @@
 package me.ripzery.warpcan.helpers
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy
 import com.bumptech.glide.request.RequestOptions
 import me.ripzery.warpcan.R
 
@@ -21,6 +22,8 @@ object GlideHelpers {
 
     fun defaultRequestOptions(): RequestOptions {
         return RequestOptions()
+                .encodeQuality(100)
+                .downsample(DownsampleStrategy.NONE)
                 .error(R.drawable.error)
     }
 }
