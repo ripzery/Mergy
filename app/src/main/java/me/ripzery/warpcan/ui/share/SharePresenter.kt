@@ -26,7 +26,7 @@ class SharePresenter(private val mView: ShareContract.View) : ShareContract.Pres
                 uploadResponse.message.log.photoId
         )
         mView.showLoading()
-        DataProvider.sendEmail(reqSendEmail.copy(email = "ripzery@gmail.com"), {
+        DataProvider.sendEmail(reqSendEmail, {
             mView.hideLoading()
             mView.showShareFail(it, reqSendEmail)
         }) {
