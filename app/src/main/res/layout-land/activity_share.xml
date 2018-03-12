@@ -13,9 +13,10 @@
         android:src="@drawable/back" />
 
     <FrameLayout
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/mergePreviewWidth"
         android:layout_height="wrap_content"
-
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/mergeShareMarginTop"
         tools:context=".ui.share.ShareActivity">
 
         <ProgressBar
@@ -27,10 +28,9 @@
 
         <ImageView
             android:id="@+id/ivShare"
-            style="@style/ShareImagePreview"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/mergeShareMarginTop"
             android:adjustViewBounds="true"
             tools:src="@drawable/phototest" />
 
