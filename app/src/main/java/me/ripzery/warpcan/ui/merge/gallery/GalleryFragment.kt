@@ -85,12 +85,12 @@ class GalleryFragment : Fragment() {
 
 
     inner class GalleryRecyclerAdapter(private val mBitmapList: ArrayList<Response.Photo>) : RecyclerView.Adapter<GalleryRecyclerAdapter.GalleryViewHolder>() {
-        override fun onBindViewHolder(holder: GalleryViewHolder?, position: Int) {
-            holder?.setData(mBitmapList[position])
+        override fun onBindViewHolder(holder: GalleryViewHolder, position: Int) {
+            holder.setData(mBitmapList[position])
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): GalleryViewHolder {
-            val rootView = LayoutInflater.from(parent!!.context).inflate(R.layout.viewgroup_layout_background, parent, false)
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryViewHolder {
+            val rootView = LayoutInflater.from(parent.context).inflate(R.layout.viewgroup_layout_background, parent, false)
             return GalleryViewHolder(rootView)
         }
 

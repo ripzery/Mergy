@@ -14,15 +14,19 @@ import me.ripzery.shooter.ImageDataCreator
 import me.ripzery.warpcan.R
 import me.ripzery.warpcan.RemoveGreenScreenActivity
 import me.ripzery.warpcan.StartActivity
+import me.ripzery.warpcan.helpers.ExifExtractor
 
 
 class MainActivity : AppCompatActivity() {
     private val REQUEST_IMAGE_CAPTURE = 1
     private lateinit var mCurrentPhotoPath: String
+    private var isFrontCamera: Boolean = true
     private var mImageUri: Uri? = null
 
     companion object {
         const val SAVED_STATE_PHOTO_PATH = "PHOTO_PATH"
+        const val TAB_S3_APERTURE_FRONT = "2.2"
+        const val TAB_S3_APERTURE_BACK = "1.9"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         savedInstanceState?.let {
-            if(it.getString(SAVED_STATE_PHOTO_PATH) != null) {
+            if (it.getString(SAVED_STATE_PHOTO_PATH) != null) {
                 mImageUri = Uri.parse(it.getString(SAVED_STATE_PHOTO_PATH))
                 showImageResult()
             }
@@ -42,6 +46,7 @@ class MainActivity : AppCompatActivity() {
         btnMerge.setOnClickListener {
             startActivity(Intent(this, RemoveGreenScreenActivity::class.java).apply {
                 putExtra(RemoveGreenScreenActivity.INTENT_PHOTO_PATH, mCurrentPhotoPath)
+                putExtra(RemoveGreenScreenActivity.INTENT_CAMERA_FACING, isFrontCamera)
             })
         }
         btnHome.setOnClickListener {
@@ -66,6 +71,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun showImageResult() {
         mCurrentPhotoPath = getRealPathFromURI(mImageUri!!)
+        val aperture = ExifExtractor.readByTag(mCurrentPhotoPath)
+        isFrontCamera = aperture ?: TAB_S3_APERTURE_FRONT == TAB_S3_APERTURE_FRONT
         val optimizer = BitmapOptimizer(mCurrentPhotoPath)
         ivPhoto.setImageBitmap(optimizer.optimize(ivPhoto.maxHeight))
         showMergeBtnIfNeeded()

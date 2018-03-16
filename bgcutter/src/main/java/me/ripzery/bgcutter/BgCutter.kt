@@ -16,7 +16,7 @@ import org.jetbrains.anko.coroutines.experimental.bg
  * Copyright © 2017 OmiseGO. All rights reserved.
  */
 
-class BgCutter(private val originalBitmap: Bitmap) {
+class BgCutter(private val originalBitmap: Bitmap, val diff: Pair<Double, Double> = 25.0 to 40.0) {
     private val bgCollection = mutableListOf<Deferred<Bitmap>>()
 
     fun removeGreen(callback: (Bitmap) -> Unit, onCompleted: (Bitmap) -> Unit) {
@@ -28,7 +28,7 @@ class BgCutter(private val originalBitmap: Bitmap) {
                 bg {
                     for (j in 0 until bitmap.height) {
                         val pixel1 = bitmap.getPixel(it, j)
-                        if (Color.green(pixel1) - Color.red(pixel1) > 25.0 && Color.green(pixel1) - Color.blue(pixel1) > 40.0) {
+                        if (Color.green(pixel1) - Color.red(pixel1) > diff.first && Color.green(pixel1) - Color.blue(pixel1) > diff.second) {
                             val a = Color.alpha(Color.TRANSPARENT)
                             bitmap.setPixel(it, j, a)
                         } else {

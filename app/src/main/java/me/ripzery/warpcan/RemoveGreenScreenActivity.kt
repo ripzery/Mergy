@@ -10,15 +10,18 @@ import kotlinx.android.synthetic.main.activity_remove_green_screen.*
 import kotlinx.android.synthetic.main.layout_toolbar.*
 import me.ripzery.bgcutter.BgCutter
 import me.ripzery.bitmapkeeper.BitmapKeeper
-import me.ripzery.warpcan.ui.merge.MergeActivity
 import me.ripzery.shooter.BitmapOptimizer
+import me.ripzery.warpcan.extensions.logd
+import me.ripzery.warpcan.ui.merge.MergeActivity
 
 class RemoveGreenScreenActivity : AppCompatActivity() {
     private lateinit var mCurrentPhotoPath: String
     private lateinit var mBitmapOptimizer: BitmapOptimizer
+    private var isFront: Boolean = true
 
     companion object {
         val INTENT_PHOTO_PATH = "current_photo_path"
+        val INTENT_CAMERA_FACING = "camera_facing"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +30,7 @@ class RemoveGreenScreenActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         title = "Processing..."
         mCurrentPhotoPath = intent.getStringExtra(INTENT_PHOTO_PATH)
+        isFront = intent.getBooleanExtra(INTENT_CAMERA_FACING, true)
         mBitmapOptimizer = BitmapOptimizer(mCurrentPhotoPath)
         setCapturedImage(ivGreenPhoto) { result ->
             startMergeActivity(result)
@@ -47,7 +51,14 @@ class RemoveGreenScreenActivity : AppCompatActivity() {
         // Optimize the image
         val optimizedBitmap = mBitmapOptimizer.optimize(target.maxHeight)
 
-        val bgCutter = BgCutter(optimizedBitmap)
+        /* Set diff value depends on the camera facing */
+        logd("Front: $isFront")
+        val diff = when (isFront) {
+            true -> 25.0 to 40.0
+            else -> 35.0 to 40.0
+        }
+
+        val bgCutter = BgCutter(optimizedBitmap, diff)
 
         bgCutter.removeGreen({
             target.setImageBitmap(it)
