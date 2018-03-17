@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showImageResult() {
         mCurrentPhotoPath = getRealPathFromURI(mImageUri!!)
-        val aperture = ExifExtractor.readByTag(mCurrentPhotoPath)
+        val aperture = ExifExtractor.readAperture(mCurrentPhotoPath)
         isFrontCamera = aperture ?: TAB_S3_APERTURE_FRONT == TAB_S3_APERTURE_FRONT
         val optimizer = BitmapOptimizer(mCurrentPhotoPath)
         ivPhoto.setImageBitmap(optimizer.optimize(ivPhoto.maxHeight))

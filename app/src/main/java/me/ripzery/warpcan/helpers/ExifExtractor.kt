@@ -11,7 +11,7 @@ import me.ripzery.warpcan.extensions.logd
  * Copyright © 2017-2018 OmiseGO. All rights reserved.
  */
 object ExifExtractor {
-    fun readByTag(filename: String): String? {
+    fun readAperture(filename: String): String? {
         val exifInterface = ExifInterface(filename)
         val aperture = exifInterface.getAttribute(ExifInterface.TAG_F_NUMBER)
         logd(aperture ?: "0.0")
